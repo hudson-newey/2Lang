@@ -13,3 +13,29 @@ pub fn generate_intermediate(cla: Vec<String>) -> bool {
         || cla.contains(&GENERATE_INTERMEDIATE_SHORT.to_string())
     );
 }
+
+pub fn output_file_path(cla: Vec<String>) -> String {
+    let default_file_path: String = "a.out".to_string();
+
+    const OUTPUT_FILE_PATH: &str = "--output";
+    const OUTPUT_FILE_PATH_SHORT: &str = "-o";
+
+    // find the position of the output flag if it exists
+    // if it does, return the next argument as the output file path
+    // if not return the default file path
+    let output_file_path_position = cla
+        .iter()
+        .position(|x| x == &OUTPUT_FILE_PATH || x == &OUTPUT_FILE_PATH_SHORT);
+
+    if output_file_path_position.is_none() {
+        return default_file_path;
+    }
+
+    let output_file_path_position = output_file_path_position.unwrap();
+
+    if output_file_path_position + 1 >= cla.len() {
+        return default_file_path;
+    }
+
+    return cla[output_file_path_position + 1].clone();
+}

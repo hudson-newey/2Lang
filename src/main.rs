@@ -26,7 +26,9 @@ fn main() {
 
     let binary_value = binary_compiler::read_file::read_file(binary_file_name.clone());
 
-    binary_compiler::write_binary::write_binary(binary_value);
+    let output_file_path = program::cla::output_file_path(args.clone());
+
+    binary_compiler::write_binary::write_binary(binary_value, output_file_path);
 
     if !program::cla::preserve_intermediate(args) {
         binary_compiler::write_binary::delete_file(binary_file_name.clone());

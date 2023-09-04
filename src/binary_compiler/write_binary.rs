@@ -11,7 +11,7 @@ pub fn delete_file(file_path: String) {
         .expect("Something went wrong deleting the file");
 }
 
-pub fn write_binary(binary: Vec<u8>) {
+pub fn write_binary(binary: Vec<u8>, file_path: String) {
     let mut full_binary: Vec<bool> = Vec::new();
 
     for bit in binary {
@@ -20,10 +20,10 @@ pub fn write_binary(binary: Vec<u8>) {
 
     println!();
 
-    delete_file("a.out".to_string());
-    let _ = write_file("a.out".to_string(), full_binary);
+    delete_file(file_path.clone());
+    let _ = write_file(file_path.clone(), full_binary);
 
-    make_file_executable("a.out".to_string());
+    make_file_executable(file_path);
 }
 
 fn write_file(file_path: String, binary: Vec<bool>) -> io::Result<()> {
