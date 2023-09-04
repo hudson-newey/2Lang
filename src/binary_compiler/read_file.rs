@@ -1,4 +1,4 @@
-pub fn read_file(file_name: String) -> Vec<i8> {
+pub fn read_file(file_name: String) -> Vec<u8> {
     let mut binary_value = Vec::new();
 
     let contents = std::fs::read_to_string(file_name)
