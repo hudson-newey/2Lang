@@ -8,6 +8,8 @@ The worlds most efficient systems programming language
 // this is a comment and will be ignored
 ```
 
+---
+
 ```C
 #macroKey value
 ```
@@ -21,6 +23,8 @@ e.g.
 ```C
 #printNewLine PRINT "$1\n"
 ```
+
+---
 
 ```
 @/path/fileName.2
@@ -37,6 +41,8 @@ PRINT "message"
 ```
 
 The print keyword is used to print out text to the screen (planned; not currently functional)
+
+---
 
 ```sh
 ;
@@ -57,12 +63,16 @@ Hello World program
 PRINT "Hello World!"
 ```
 
+---
+
 Cheat Hello World program
 
 ```C
 @lib/std.2
 HELLO_WORLD
 ```
+
+---
 
 Localized macro example
 
@@ -75,4 +85,20 @@ will produce
 
 ```C
 11011001
+```
+
+## Compiler
+
+Preserve the intermediary binary output
+
+```sh
+cargo r <filePath> -p
+```
+
+---
+
+Take in an intermediary binary (_.bin_ file)
+
+```sh
+cargo r <filePath> -b
 ```
