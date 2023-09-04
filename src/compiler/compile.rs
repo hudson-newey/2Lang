@@ -73,6 +73,26 @@ fn get_macros(file_lines: Vec<String>) -> Vec<String> {
     return macros;
 }
 
+fn replace_macro_parameter(macro_value: String, calling_line: String) -> String {
+    // split the calling_line by spaces
+    // get the 2nd item in the array if it exists. If not, return the original macro_value
+    // if the 2nd item in the split array exists, replace all occurrences of the '$' character with the 2nd item
+    let split_macro = calling_line.split(" ").map(|s| s.to_string()).collect::<Vec<String>>();
+
+    if split_macro.len() < 3 {
+        return macro_value;
+    }
+
+    let parameter_value: String = split_macro[2].to_string();
+
+    if parameter_value == "" {
+        return macro_value;
+    }
+
+    // replace all occurrences of $ with the macro_value
+    return macro_value.replace("$", &parameter_value);
+}
+
 fn get_macro_value(macro_value: String) -> String {
     // return everything after the first space
     return macro_value.split(" ").map(|s| s.to_string()).collect::<Vec<String>>()[1].to_string();
@@ -126,8 +146,11 @@ pub fn compile_file(file_path: String) -> String {
 
             if line.contains(&*searching_macro_key) {
                 let macro_value: String = get_macro_value(searching_macro.clone());
+
+                let interpolated_macro_value: String = replace_macro_parameter(macro_value, line.clone());
+
                 // replace the macro key in the string with the macro value
-                let new_line: String = line.replace(&*searching_macro_key, &macro_value);
+                let new_line: String = line.replace(&*searching_macro_key, &interpolated_macro_value);
 
                 new_file_lines.push(new_line);
                 line_replaced = true;
