@@ -2,19 +2,7 @@
 
 The worlds most efficient systems programming language
 
-## Standard Library (`@lib/std.2`) Symbols & Words
-
-```sh
-PRINT "message"
-```
-
-The print keyword is used to print out text to the screen (planned; not currently functional)
-
-```sh
-;
-```
-
-The semi-column is an execute command. It will execute all commands in the CPU registers.
+## Reserved Symbols & Words
 
 ```C
 // this is a comment and will be ignored
@@ -34,13 +22,27 @@ e.g.
 #printNewLine PRINT "$1\n"
 ```
 
-By using currying, you are able to create functions which take two arguments.
-
 ```
 @/path/fileName.2
 ```
 
 Will import a file to be used
+
+By using currying, you are able to create functions which take two arguments.
+
+## Standard Library (`@lib/std.2`) Symbols & Words
+
+```sh
+PRINT "message"
+```
+
+The print keyword is used to print out text to the screen (planned; not currently functional)
+
+```sh
+;
+```
+
+The semi-column is an execute command. It will execute all commands in the CPU registers.
 
 ## Conventions
 
