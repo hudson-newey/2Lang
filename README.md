@@ -54,3 +54,10 @@ Hello World program
 @lib/std.2
 PRINT "Hello World!"
 ```
+
+Cheat Hello World program
+
+```C
+@lib/std.2
+HELLO_WORLD
+```
