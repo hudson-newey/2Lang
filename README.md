@@ -2,7 +2,7 @@
 
 The worlds most efficient systems programming language
 
-## Reserved Symbols & Words
+## Standard Library (`@lib/std.2`) Symbols & Words
 
 ```sh
 PRINT "message"
