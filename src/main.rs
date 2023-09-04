@@ -24,8 +24,6 @@ fn main() {
             file_name.to_string()
         };
 
-    println!("{}", binary_file_name);
-
     let binary_value = binary_compiler::read_file::read_file(binary_file_name.clone());
 
     binary_compiler::write_binary::write_binary(binary_value);

@@ -21,7 +21,7 @@ pub fn write_binary(binary: Vec<u8>) {
     println!();
 
     delete_file("a.out".to_string());
-    write_file("a.out".to_string(), full_binary);
+    let _ = write_file("a.out".to_string(), full_binary);
 
     make_file_executable("a.out".to_string());
 }
