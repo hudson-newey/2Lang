@@ -103,6 +103,75 @@ fn get_macro_key(macro_value: String) -> String {
     return macro_value.split(" ").map(|s| s.to_string()).collect::<Vec<String>>()[0].to_string();
 }
 
+fn find_text_between_quotation_marks(input: String) -> Vec<String> {
+    let mut result = Vec::new();
+    let mut inside_quotes = false;
+    let mut current_text = String::new();
+
+    for c in input.chars() {
+        match c {
+            '"' => {
+                // Toggle the inside_quotes flag when encountering a double quotation mark.
+                inside_quotes = !inside_quotes;
+
+                // If we've just closed a quotation, add the captured text to the result.
+                if !inside_quotes {
+                    result.push(current_text.clone());
+                    current_text.clear();
+                }
+            }
+            _ if inside_quotes => {
+                // If we're inside quotation marks, append the character to the current_text.
+                current_text.push(c);
+            }
+            _ => { }
+        }
+    }
+
+    return result;
+}
+
+fn string_to_binary(input_string: String) -> String {
+    let mut binary_string = String::new();
+
+    for c in input_string.chars() {
+        let binary_representation = format!("{:08b}", c as u8);
+        binary_string.push_str(&binary_representation);
+    }
+
+    return binary_string;
+}
+
+// allows you to use strings in your code e.g. "Hello World!"
+// instead of having to remember the binary values
+fn convert_strings_to_binary(content: Vec<String>) -> Vec<String> {
+    // strings are defined as anything in between double or single quotation marks
+    // we should therefore search for quotation marks, set a flag saying that we are in quotation marks, until we see another
+    // get all characters that were found in between the quotation marks by removing the quotation marks
+    // and converting the string to ASCII binary
+    // we use ASCII binary because that's what processors natively support
+    // I might add support for UTF-8/16 in the future
+
+    let mut all_lines: Vec<String> = Vec::new();
+
+    for line in content {
+        let mut modified_line = line.clone();
+
+        let text_in_between_quotation_marks: Vec<String> = find_text_between_quotation_marks(line);
+
+        for text in text_in_between_quotation_marks {
+            modified_line = modified_line.replace(
+                &text,
+                &string_to_binary(text.clone())
+            );
+        }
+
+        all_lines.push(modified_line);
+    }
+
+    return all_lines;
+}
+
 fn read_file(file_path: String) -> Vec<String> {
     let file = std::fs::read_to_string(file_path)
         .expect("Something went wrong reading the file");
@@ -130,9 +199,11 @@ pub fn compile_file(file_path: String) -> String {
     let mut new_file_lines: Vec<String> = Vec::new();
 
     let original_file_lines: Vec<String> = remove_imports(
-        remove_macros(
-            remove_comments(
-                read_file(file_path.clone())
+        convert_strings_to_binary(
+            remove_macros(
+                remove_comments(
+                    read_file(file_path.clone())
+                )
             )
         )
     );
