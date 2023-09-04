@@ -61,3 +61,16 @@ Cheat Hello World program
 @lib/std.2
 HELLO_WORLD
 ```
+
+Localized macro example
+
+```C
+#MY_MACRO 11011001
+MY_MACRO
+```
+
+will produce
+
+```C
+11011001
+```
