@@ -8,7 +8,7 @@ The worlds most efficient systems programming language
 PRINT "message"
 ```
 
-The print keyword is used to print out text to the screen
+The print keyword is used to print out text to the screen (planned; not currently functional)
 
 ```sh
 ;
