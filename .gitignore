@@ -1,0 +1,5 @@
+/target
+
+# 2 lang build directory
+*.bin
+*.out
