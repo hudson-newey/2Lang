@@ -87,6 +87,17 @@ will produce
 11011001
 ```
 
+---
+
+Macro with parameter example
+
+```C
+#USE_PARAMETER 0000 $
+USE_PARAMETER 1111
+```
+
+should replace _$_ with 1111
+
 ## Compiler
 
 Preserve the intermediary binary output
