@@ -68,7 +68,7 @@ PRINT "Hello World!"
 Cheat Hello World program
 
 ```C
-@lib/std.2
+@lib/helloWorld.2
 HELLO_WORLD
 ```
 
