@@ -24,6 +24,18 @@ fn interpolate_imports(file_path: String) -> Vec<String> {
     return new_file_lines;
 }
 
+fn remove_comments(file_contents: Vec<String>) -> Vec<String> {
+    let mut new_file_contents: Vec<String> = Vec::new();
+
+    for line in file_contents {
+        if !line.starts_with("//") {
+            new_file_contents.push(line);
+        }
+    }
+
+    return new_file_contents;
+}
+
 fn remove_imports(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
@@ -86,7 +98,9 @@ pub fn compile_file(file_path: String) -> String {
     let mut new_file_lines: Vec<String> = Vec::new();
 
     let original_file_lines: Vec<String> = remove_imports(
-        read_file(file_path.clone())
+        remove_comments(
+            read_file(file_path.clone())
+        )
     );
     let interpolated_file_lines: Vec<String> = interpolate_imports(file_path.clone());
     let macros: Vec<String> = get_macros(interpolated_file_lines.clone());
