@@ -12,6 +12,12 @@ pub fn generate_intermediate(cla: Vec<String>) -> bool {
         || cla.contains(&GENERATE_INTERMEDIATE_SHORT.to_string()));
 }
 
+pub fn log_debug(cla: Vec<String>) -> bool {
+    const LOG_DEBUG: &str = "--debug";
+    const LOG_DEBUG_SHORT: &str = "-d";
+    return cla.contains(&LOG_DEBUG.to_string()) || cla.contains(&LOG_DEBUG_SHORT.to_string());
+}
+
 pub fn output_file_path(cla: Vec<String>) -> String {
     let default_file_path: String = "a.out".to_string();
 

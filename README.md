@@ -103,7 +103,8 @@ should replace _$_ with 1111
 Preserve the intermediary binary output
 
 ```sh
-cargo r <filePath> -p
+$ cargo r <filePath> -p
+>
 ```
 
 ---
@@ -111,5 +112,15 @@ cargo r <filePath> -p
 Take in an intermediary binary (_.bin_ file)
 
 ```sh
-cargo r <filePath> -b
+$ cargo r <filePath> -b
+>
+```
+
+---
+
+Run in debug mode (log file reads, etc...)
+
+```sh
+$ cargo r <filePath> -d
+>
 ```
