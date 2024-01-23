@@ -1,18 +1,33 @@
 use std::io::Write;
 
 mod errors {
+    pub mod files;
     pub mod generic;
 }
 
 fn interpolate_imports(file_path: String) -> Vec<String> {
-    let file_lines: Vec<String> = read_file(file_path);
+    let file_lines: Vec<String> = read_file(file_path.clone());
     let mut new_file_lines: Vec<String> = Vec::new();
 
+    let mut line_number: usize = 0;
+
     for line in file_lines {
+        line_number += 1;
+
         if line.starts_with("@") {
             // remove the @ symbol and read the file at the remaining file path
             // replace the line with the contents of the file
             let imported_file_path: String = line[1..].to_string();
+
+            // check if the file exists
+            if !std::path::Path::new(&imported_file_path).exists() {
+                errors::files::import_error(
+                    file_path.to_string(),
+                    line_number,
+                    imported_file_path.clone(),
+                );
+            }
+
             let imported_file_lines: Vec<String> = read_file(imported_file_path);
 
             for imported_line in imported_file_lines {
@@ -209,6 +224,11 @@ fn write_to_file(file_path: String, contents: Vec<String>) {
 
 pub fn compile_file(file_path: String) -> String {
     let mut new_file_lines: Vec<String> = Vec::new();
+
+    // check if the input file exists
+    if !std::path::Path::new(&file_path).exists() {
+        errors::files::file_error(file_path.clone());
+    }
 
     let original_file_lines: Vec<String> = remove_imports(convert_strings_to_binary(
         remove_macros(remove_comments(read_file(file_path.clone()))),
