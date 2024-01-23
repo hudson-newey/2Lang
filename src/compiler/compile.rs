@@ -77,7 +77,10 @@ fn replace_macro_parameter(macro_value: String, calling_line: String) -> String 
     // split the calling_line by spaces
     // get the 2nd item in the array if it exists. If not, return the original macro_value
     // if the 2nd item in the split array exists, replace all occurrences of the '$' character with the 2nd item
-    let split_macro = calling_line.split(" ").map(|s| s.to_string()).collect::<Vec<String>>();
+    let split_macro = calling_line
+        .split(" ")
+        .map(|s| s.to_string())
+        .collect::<Vec<String>>();
 
     if split_macro.len() < 3 {
         return macro_value;
@@ -95,12 +98,20 @@ fn replace_macro_parameter(macro_value: String, calling_line: String) -> String 
 
 fn get_macro_value(macro_value: String) -> String {
     // return everything after the first space
-    return macro_value.split(" ").map(|s| s.to_string()).collect::<Vec<String>>()[1].to_string();
+    return macro_value
+        .split(" ")
+        .map(|s| s.to_string())
+        .collect::<Vec<String>>()[1]
+        .to_string();
 }
 
 fn get_macro_key(macro_value: String) -> String {
     // return everything before the first space
-    return macro_value.split(" ").map(|s| s.to_string()).collect::<Vec<String>>()[0].to_string();
+    return macro_value
+        .split(" ")
+        .map(|s| s.to_string())
+        .collect::<Vec<String>>()[0]
+        .to_string();
 }
 
 fn find_text_between_quotation_marks(input: String) -> Vec<String> {
@@ -124,7 +135,7 @@ fn find_text_between_quotation_marks(input: String) -> Vec<String> {
                 // If we're inside quotation marks, append the character to the current_text.
                 current_text.push(c);
             }
-            _ => { }
+            _ => {}
         }
     }
 
@@ -160,10 +171,7 @@ fn convert_strings_to_binary(content: Vec<String>) -> Vec<String> {
         let text_in_between_quotation_marks: Vec<String> = find_text_between_quotation_marks(line);
 
         for text in text_in_between_quotation_marks {
-            modified_line = modified_line.replace(
-                &text,
-                &string_to_binary(text.clone())
-            );
+            modified_line = modified_line.replace(&text, &string_to_binary(text.clone()));
         }
 
         all_lines.push(modified_line);
@@ -173,8 +181,7 @@ fn convert_strings_to_binary(content: Vec<String>) -> Vec<String> {
 }
 
 fn read_file(file_path: String) -> Vec<String> {
-    let file = std::fs::read_to_string(file_path)
-        .expect("Something went wrong reading the file");
+    let file = std::fs::read_to_string(file_path).expect("Something went wrong reading the file");
 
     let lines: Vec<String> = file
         .split("\n")
@@ -186,8 +193,8 @@ fn read_file(file_path: String) -> Vec<String> {
 }
 
 fn write_to_file(file_path: String, contents: Vec<String>) {
-    let mut file = std::fs::File::create(file_path)
-        .expect("Something went wrong creating the file");
+    let mut file =
+        std::fs::File::create(file_path).expect("Something went wrong creating the file");
 
     for line in contents {
         file.write_all((line + "\n").as_bytes())
@@ -198,15 +205,9 @@ fn write_to_file(file_path: String, contents: Vec<String>) {
 pub fn compile_file(file_path: String) -> String {
     let mut new_file_lines: Vec<String> = Vec::new();
 
-    let original_file_lines: Vec<String> = remove_imports(
-        convert_strings_to_binary(
-            remove_macros(
-                remove_comments(
-                    read_file(file_path.clone())
-                )
-            )
-        )
-    );
+    let original_file_lines: Vec<String> = remove_imports(convert_strings_to_binary(
+        remove_macros(remove_comments(read_file(file_path.clone()))),
+    ));
     let interpolated_file_lines: Vec<String> = interpolate_imports(file_path.clone());
     let macros: Vec<String> = get_macros(interpolated_file_lines.clone());
 
@@ -218,10 +219,12 @@ pub fn compile_file(file_path: String) -> String {
             if line.contains(&*searching_macro_key) {
                 let macro_value: String = get_macro_value(searching_macro.clone());
 
-                let interpolated_macro_value: String = replace_macro_parameter(macro_value, line.clone());
+                let interpolated_macro_value: String =
+                    replace_macro_parameter(macro_value, line.clone());
 
                 // replace the macro key in the string with the macro value
-                let new_line: String = line.replace(&*searching_macro_key, &interpolated_macro_value);
+                let new_line: String =
+                    line.replace(&*searching_macro_key, &interpolated_macro_value);
 
                 new_file_lines.push(new_line);
                 line_replaced = true;

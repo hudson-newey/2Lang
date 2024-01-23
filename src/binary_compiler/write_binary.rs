@@ -7,8 +7,7 @@ pub fn delete_file(file_path: String) {
         return;
     }
 
-    std::fs::remove_file(file_path)
-        .expect("Something went wrong deleting the file");
+    std::fs::remove_file(file_path).expect("Something went wrong deleting the file");
 }
 
 pub fn write_binary(binary: Vec<u8>, file_path: String) {
