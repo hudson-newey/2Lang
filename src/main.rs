@@ -6,7 +6,7 @@ mod binary_compiler {
 }
 
 mod compiler {
-    pub mod compile;
+    pub mod compiler;
 }
 
 mod program {
@@ -23,7 +23,7 @@ fn main() {
     }
 
     let binary_file_name: String = if program::cla::generate_intermediate(args.clone()) {
-        compiler::compile::compile_file(file_name.to_string())
+        compiler::compiler::compile_file(file_name.to_string())
     } else {
         file_name.to_string()
     };

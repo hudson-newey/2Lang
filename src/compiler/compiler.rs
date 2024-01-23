@@ -1,5 +1,9 @@
 use std::io::Write;
 
+mod errors {
+    pub mod generic;
+}
+
 fn interpolate_imports(file_path: String) -> Vec<String> {
     let file_lines: Vec<String> = read_file(file_path);
     let mut new_file_lines: Vec<String> = Vec::new();
@@ -82,6 +86,7 @@ fn replace_macro_parameter(macro_value: String, calling_line: String) -> String 
         .map(|s| s.to_string())
         .collect::<Vec<String>>();
 
+    // TODO: I should throw a compiler error here
     if split_macro.len() < 3 {
         return macro_value;
     }
@@ -93,7 +98,7 @@ fn replace_macro_parameter(macro_value: String, calling_line: String) -> String 
     }
 
     // replace all occurrences of $ with the macro_value
-    return macro_value.replace("$", &parameter_value);
+    return macro_value.replacen("$", &parameter_value, 1);
 }
 
 fn get_macro_value(macro_value: String) -> String {
@@ -228,7 +233,6 @@ pub fn compile_file(file_path: String) -> String {
 
                 new_file_lines.push(new_line);
                 line_replaced = true;
-                break;
             }
         }
 
