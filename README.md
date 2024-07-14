@@ -4,11 +4,13 @@ The worlds most efficient systems programming language
 
 ## Reserved Symbols & Words
 
+### Comments
+
 ```C
 // this is a comment and will be ignored
 ```
 
----
+### Pre-Processor Macros
 
 ```C
 #macroKey value
@@ -20,19 +22,44 @@ You can also define interpolated functions in this manner as all arguments will 
 
 e.g.
 
-```C
+```c
 #printNewLine PRINT "$1\n"
 ```
 
----
+### Imports
 
-```
+```sh
 @/path/fileName.2
 ```
 
 Will import a file to be used
 
 By using currying, you are able to create functions which take two arguments.
+
+### Pre-Processor Code Execution
+
+You can run code at compile time using the `@{}` syntax
+
+It is best to explain this with "C-Like" syntax
+
+For example, if I wanted to create macros for all the printable ASCII characters (A-Z, a-z), I could write a pre-processor code execution block like the following.
+
+```c
+// this std lib library does not currently exist
+// but I do have plans to create 2lang C compiler macros
+@/lib/clang/clang.2
+@/lib/types/in8.2
+
+@{
+    #include <stdio.h>
+
+    for (int i = 65; i < 122; i++) {
+        printf("#%c %i\n", i);
+    }
+}
+```
+
+Note that the example above would not work as pre-processor block above would not work because pre-processor blocks can only run 2lang code, and not C-code. However, for this example, I have used C for clarity.
 
 ## Standard Library (`@lib/std.2`) Symbols & Words
 
