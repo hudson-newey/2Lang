@@ -5,7 +5,7 @@ mod macros;
 mod code_execution;
 mod util;
 
-pub fn compile_file(file_path: String) -> String {
+pub fn pre_process(file_path: String) -> String {
     let mut new_file_lines: Vec<String> = Vec::new();
 
     // check if the input file exists

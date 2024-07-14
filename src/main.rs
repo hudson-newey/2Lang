@@ -1,44 +1,52 @@
-use std::env;
+use std::{env, fs};
+use std::process::exit;
 
 mod compiler;
 mod pre_processor;
 mod program;
+mod optimizer;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() < 2 {
+    let file_name: &String = if args.len() > 1 {
+        &args[1]
+    } else {
         println!("Usage: {} <file_name> [options]", args[0]);
-        return;
-    }
-    let file_name = &args[1];
+        exit(1)
+    };
 
     if program::cla::log_debug(args.clone()) {
         println!("\nargs: {:?}", args);
         println!("file name: {}\n", file_name);
     }
 
-    let binary_file_name: String = if program::cla::generate_intermediate(args.clone()) {
-        pre_processor::pre_processor::compile_file(file_name.to_string())
+    let input_file_name: String = if program::cla::generate_intermediate(args.clone()) {
+        pre_processor::pre_processor::pre_process(file_name.to_string())
     } else {
         file_name.to_string()
     };
 
     if program::cla::log_debug(args.clone()) {
-        println!("binary file in: {}\n", binary_file_name);
+        println!("File in: {}\n", input_file_name);
     }
 
-    let binary_value = compiler::read_file::read_file(binary_file_name.clone());
-
+    let compiled_file_path = compiler::read_file::read_file(input_file_name.clone());
     let output_file_path = program::cla::output_file_path(args.clone());
 
     if program::cla::log_debug(args.clone()) {
         println!("output file out: {}\n", output_file_path);
     }
 
-    compiler::write_binary::write_binary(binary_value, output_file_path);
+    compiler::write_binary::write_binary(compiled_file_path, output_file_path.clone());
 
-    if !program::cla::preserve_intermediate(args) {
-        compiler::write_binary::delete_file(binary_file_name.clone());
+    if !program::cla::preserve_intermediate(args.clone()) {
+        compiler::write_binary::delete_file(input_file_name.clone());
+    }
+
+    if program::cla::output_to_stdout(args.clone()) {
+        let contents = fs::read_to_string(output_file_path.clone())
+            .expect("Something went wrong reading the file");
+        println!("{}", contents);
     }
 }

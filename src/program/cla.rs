@@ -43,3 +43,10 @@ pub fn output_file_path(cla: Vec<String>) -> String {
 
     return cla[output_file_path_position + 1].clone();
 }
+
+pub fn output_to_stdout(cla: Vec<String>) -> bool {
+    const OUTPUT_TO_STDOUT: &str = "--stdout";
+    const OUTPUT_TO_STDOUT_SHORT: &str = "-s";
+    return cla.contains(&OUTPUT_TO_STDOUT.to_string())
+        || cla.contains(&OUTPUT_TO_STDOUT_SHORT.to_string());
+}

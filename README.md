@@ -125,29 +125,9 @@ USE_PARAMETER 1111
 
 should replace _$_ with 1111
 
-## Compiler
+## Command Line Options
 
-Preserve the intermediary binary output
-
-```sh
-$ cargo r <filePath> -p
->
-```
-
----
-
-Take in an intermediary binary (_.bin_ file)
-
-```sh
-$ cargo r <filePath> -b
->
-```
-
----
-
-Run in debug mode (log file reads, etc...)
-
-```sh
-$ cargo r <filePath> -d
->
-```
+- `-p`, `--preserve-intermediate` preserve the intermediary output produced by the pre-processor
+- `-b`, `--generate-intermediate` takes an intermediary output (_.bin_) file produced by the pre-processor
+- `-d`, `--debug` Run in debug mode (log file reads, etc...)
+- `-s`, `--stdout` Output the final file contents to stdout
