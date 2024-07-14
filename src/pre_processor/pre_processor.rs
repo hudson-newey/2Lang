@@ -1,9 +1,6 @@
 use std::io::Write;
 
-mod errors {
-    pub mod files;
-    pub mod generic;
-}
+mod errors;
 
 fn interpolate_imports(file_path: String) -> Vec<String> {
     let file_lines: Vec<String> = read_file(file_path.clone());
