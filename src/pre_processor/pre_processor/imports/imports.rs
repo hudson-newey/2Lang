@@ -1,7 +1,6 @@
 use crate::pre_processor::pre_processor::{util, errors};
 
-pub fn interpolate_imports(file_path: String) -> Vec<String> {
-    let file_lines: Vec<String> = util::util::read_file(file_path.clone());
+pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<String> {
     let mut new_file_lines: Vec<String> = Vec::new();
 
     let mut line_number: usize = 0;

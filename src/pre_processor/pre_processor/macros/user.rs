@@ -65,3 +65,34 @@ pub fn get_macro_key(macro_value: String) -> String {
         .to_string();
 }
 
+pub fn interpolate_macros(target: &Vec<String>) -> Vec<String> {
+    let mut new_file_lines: Vec<String> = Vec::new();
+    let macros: Vec<String> = get_macros(target.clone());
+
+    for line in target {
+        let mut line_replaced = false;
+        for searching_macro in &macros {
+            let searching_macro_key: String = get_macro_key(searching_macro.clone());
+
+            if line.contains(&*searching_macro_key) {
+                let macro_value: String = get_macro_value(searching_macro.clone());
+
+                let interpolated_macro_value: String =
+                    replace_macro_parameter(macro_value, line.clone());
+
+                // replace the macro key in the string with the macro value
+                let new_line: String =
+                    line.replace(&*searching_macro_key, &interpolated_macro_value);
+
+                new_file_lines.push(new_line);
+                line_replaced = true;
+            }
+        }
+
+        if !line_replaced {
+            new_file_lines.push(line.clone());
+        }
+    }
+
+    return new_file_lines.clone();
+}

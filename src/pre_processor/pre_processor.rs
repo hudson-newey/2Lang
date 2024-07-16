@@ -5,62 +5,51 @@ mod macros;
 mod code_execution;
 mod util;
 
-pub fn pre_process(file_path: String, should_expand_strings: &bool) -> String {
-    let mut new_file_lines: Vec<String> = Vec::new();
+use util::util::{read_file, write_to_file};
+use imports::imports::{remove_imports, interpolate_imports};
+use macros::user::{remove_macros, interpolate_macros};
+use macros::inbuilt::convert_strings_to_binary;
+use minification::comments::remove_comments;
+use errors::files::file_error;
+use std::path::Path;
 
+pub fn pre_process(file_path: String, should_expand_strings: &bool) -> String {
     // check if the input file exists
-    if !std::path::Path::new(&file_path).exists() {
-        errors::files::file_error(file_path.clone());
+    if !Path::new(&file_path).exists() {
+        file_error(file_path.clone());
     }
 
-    // create an "original file" which contains no comments, macros, and has
-    // strings automatically expanded to their binary representation
-    let no_comments_file = minification::comments::remove_comments(util::util::read_file(file_path.clone()));
-    let no_macros_file = macros::user::remove_macros(no_comments_file.clone());
-    let pre_processed_strings = match *should_expand_strings {
-        true => macros::inbuilt::convert_strings_to_binary(no_macros_file.clone()),
-        false => no_macros_file.clone()
+    // by removing comments first we ensure that macros and imports that are
+    // commented out do not get processed by the pre-processor
+    let no_unit_comments = remove_comments(read_file(file_path.clone()));
+
+    // we interpolate imports first so that we can remove imports
+    // and perform inbuilt macro operations to a single file
+    let import_interpolated = interpolate_imports(no_unit_comments.clone(), file_path.clone());
+
+    // we remove comments from the import expanded file so that macros that are
+    // commented out both in source, and library source files are not
+    // expanded during pre-processing
+    let no_comments = remove_comments(import_interpolated.clone());
+
+    let binary_strings = match *should_expand_strings {
+        true => convert_strings_to_binary(no_comments.clone()),
+        false => no_comments.clone()
     };
 
-    // we create a "target" which does not contain any macros, imports, or comments
-    // the source file will contain a single file that contains all the imports
-    // from this file, we generate all the macros keys that we need to replace
-    let target: Vec<String> = imports::imports::remove_imports(pre_processed_strings.clone());
-    let source: Vec<String> = imports::imports::interpolate_imports(file_path.clone());
-    let macros: Vec<String> = macros::user::get_macros(source.clone());
+    // a fully interpolated file contains the maximum compilation unit possible
+    // with all macros fully expanded, and imports interpolated in a single
+    // source file
+    let full_interpolated: Vec<String> = interpolate_macros(&binary_strings);
 
-    for line in target {
-        let mut line_replaced = false;
-        for searching_macro in &macros {
-            let searching_macro_key: String = macros::user::get_macro_key(searching_macro.clone());
+    // by this point the file all macros should have been fully expanded
+    // and we can start removing parts of the file that are not ones or zeros
+    // therefore reducing the size that the compiler needs to process
+    let no_imports_file = remove_imports(full_interpolated.clone());
+    let result = remove_macros(no_imports_file.clone());
 
-            if line.contains(&*searching_macro_key) {
-                let macro_value: String = macros::user::get_macro_value(searching_macro.clone());
-
-                let interpolated_macro_value: String =
-                    macros::user::replace_macro_parameter(macro_value, line.clone());
-
-                // replace the macro key in the string with the macro value
-                let new_line: String =
-                    line.replace(&*searching_macro_key, &interpolated_macro_value);
-
-                new_file_lines.push(new_line);
-                line_replaced = true;
-            }
-        }
-
-        if !line_replaced {
-            new_file_lines.push(line);
-        }
-    }
-
-    let new_file_path: String = format!("{}{}", file_path, ".bin");
-
-    util::util::write_to_file(new_file_path, new_file_lines.clone());
-
-    let new_file_path: String = format!("{}{}", file_path, ".bin");
-
-    util::util::write_to_file(new_file_path.clone(), new_file_lines);
+    let new_file_path: String = format!("{}.bin", file_path);
+    write_to_file(new_file_path.clone(), result.clone());
 
     return new_file_path;
 }
