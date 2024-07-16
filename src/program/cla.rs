@@ -50,3 +50,8 @@ pub fn output_to_stdout(cla: Vec<String>) -> bool {
     return cla.contains(&OUTPUT_TO_STDOUT.to_string())
         || cla.contains(&OUTPUT_TO_STDOUT_SHORT.to_string());
 }
+
+pub fn no_expand_strings(cla: Vec<String>) -> bool {
+    const NO_EXPAND_STRINGS: &str = "--no-expand-strings";
+    return cla.contains(&NO_EXPAND_STRINGS.to_string());
+}

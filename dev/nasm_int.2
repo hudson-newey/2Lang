@@ -1,0 +1,11 @@
+// 00401020     INT     0x80		1100 1101 1000 0000
+// 00401014     INT    	0x80		1100 1101 1000 0000
+
+// 0x80 = 0000 0000 10000 0000
+// therefore, I assume that the INT operation is 1100 1101
+
+@lib/asm/nasm.2
+
+INT 1000 0000
+INT 0000 1000
+INT 0010 0000
