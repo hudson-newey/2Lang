@@ -48,7 +48,7 @@ For example, if I wanted to create macros for all the printable ASCII characters
 // this std lib library does not currently exist
 // but I do have plans to create 2lang C compiler macros
 @/lib/clang/clang.2
-@/lib/types/in8.2
+@/lib/types/int8.2
 
 @{
     #include <stdio.h>
@@ -60,6 +60,22 @@ For example, if I wanted to create macros for all the printable ASCII characters
 ```
 
 Note that the example above would not work as pre-processor block above would not work because pre-processor blocks can only run 2lang code, and not C-code. However, for this example, I have used C for clarity.
+
+### Pre-Processor Code Execution (Using Shell STDOUT)
+
+Alternatively, if you (understandably) don't want to create binary macros
+for the pre-processor, it is possible to use shebangs to specify an interpreter.
+
+Any output captured in STDOUT will be interpolated into the pre-processors
+source input.
+
+```python
+@!/usr/bin/env python3{
+    for i in range(65, 122):
+        ascii_character = char(i)
+        print(f"#${ascii_character} {i}")
+}
+```
 
 ## Standard Library (`@lib/std.2`) Symbols & Words
 
