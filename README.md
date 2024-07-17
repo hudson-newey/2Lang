@@ -143,7 +143,9 @@ should replace _$_ with 1111
 
 ## Command Line Options
 
-## Compiler Options
+- `--run` automatically runs the program after compilation
+
+### Compiler Options
 
 - `-p`, `--preserve-intermediate` preserve the intermediary output produced by the pre-processor
 - `-b`, `--generate-intermediate` takes an intermediary output (_.bin_) file produced by the pre-processor
@@ -153,3 +155,7 @@ should replace _$_ with 1111
 ### Pre-Processor Options
 
 - `--no-expand-strings` Does not expand strings to their binary representation
+
+### Optimizer Options
+
+- `--skip-optimizer` Does not run the optimizer on the output source code

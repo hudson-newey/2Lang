@@ -1,5 +1,5 @@
 use std::{env, fs};
-use std::process::exit;
+use std::process::{exit, Command};
 
 mod compiler;
 mod pre_processor;
@@ -49,5 +49,11 @@ fn main() {
         let contents = fs::read_to_string(output_file_path.clone())
             .expect("Something went wrong reading the file");
         println!("{}", contents);
+    }
+
+    if program::cla::auto_run(args.clone()) {
+        Command::new(output_file_path)
+            .spawn()
+            .expect("failed to execute process");
     }
 }
