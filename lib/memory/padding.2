@@ -1,0 +1,17 @@
+// These pre-processor functions fill the remaining memory address with
+// zeros until the next 64, 32, 16, or 8 bit address offset
+
+// looks at the current address space and fills to the next "n" bit factor
+//
+// e.g. 01 FILL_8_BIT would output 01 000000
+// where the next six bits are set to zero so that the memory address is a factor of 8
+#FILL_64_BIT @{}
+#FILL_32_BIT @{}
+#FILL_16_BIT @{}
+#FILL_8_BIT @{}
+
+// a lower level version of
+#8_ZERO_BITS 00000000
+#16_ZERO_BITS 00000000 00000000
+#32_ZERO_BITS 00000000 00000000 00000000 00000000
+#64_ZERO_BITS 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
