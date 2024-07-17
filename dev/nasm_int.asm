@@ -1,4 +1,0 @@
-_start:
-    INT 0x80
-    INT 0x8
-    INT 0x20
