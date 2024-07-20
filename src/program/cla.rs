@@ -5,6 +5,11 @@ pub fn preserve_intermediate(cla: Vec<String>) -> bool {
         || cla.contains(&PRESERVE_INTERMEDIATE_SHORT.to_string());
 }
 
+pub fn preserve_linked(cla: Vec<String>) -> bool {
+    const PRESERVE_LINKED: &str = "--preserve-linked";
+    return cla.contains(&PRESERVE_LINKED.to_string());
+}
+
 pub fn generate_intermediate(cla: Vec<String>) -> bool {
     const GENERATE_INTERMEDIATE: &str = "--generate-intermediate";
     const GENERATE_INTERMEDIATE_SHORT: &str = "-b";

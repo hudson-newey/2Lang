@@ -23,7 +23,13 @@ fn main() {
 
     let input_file_name: String = if program::cla::generate_intermediate(args.clone()) {
         let should_expand_strings = !program::cla::no_expand_strings(args.clone());
-        pre_processor::pre_processor::pre_process(file_name.to_string(), &should_expand_strings)
+        let should_preserve_linked = program::cla::preserve_linked(args.clone());
+
+        pre_processor::pre_processor::pre_process(
+            file_name.to_string(),
+            &should_expand_strings,
+            &should_preserve_linked
+        )
     } else {
         file_name.to_string()
     };

@@ -47,13 +47,25 @@ pub fn replace_macro_parameter(macro_value: String, calling_line: String) -> Str
     return macro_value.replacen("$", &parameter_value, 1);
 }
 
+// a macro value is defined as everything after a space or tab character
+// up to the first newline character
 pub fn get_macro_value(macro_value: String) -> String {
-    // return everything after the first space
-    return macro_value
-        .split(" ")
-        .map(|s| s.to_string())
-        .collect::<Vec<String>>()[1]
-        .to_string();
+    let start_index = match macro_value.find(" ") {
+        Some(index) => index,
+        None => 0,
+    };
+
+    if start_index == 0 {
+        return String::from("");
+    }
+
+    let end_index = match macro_value.find("\n") {
+        Some(index) => index,
+        None => macro_value.len(),
+    };
+
+    let result = macro_value[start_index..end_index].to_string();
+    return result;
 }
 
 pub fn get_macro_key(macro_value: String) -> String {

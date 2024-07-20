@@ -147,13 +147,14 @@ should replace _$_ with 1111
 
 ### Compiler Options
 
-- `-p`, `--preserve-intermediate` preserve the intermediary output produced by the pre-processor
 - `-b`, `--generate-intermediate` takes an intermediary output (_.bin_) file produced by the pre-processor
 - `-d`, `--debug` Run in debug mode (log file reads, etc...)
 - `-s`, `--stdout` Output the final file contents to stdout
 
 ### Pre-Processor Options
 
+- `-p`, `--preserve-intermediate` preserve the output produced by the pre-processor
+- `--preserve-linked` Preserves the statically linked file (without macros expanded)
 - `--no-expand-strings` Does not expand strings to their binary representation
 
 ### Optimizer Options

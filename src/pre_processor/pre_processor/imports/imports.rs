@@ -37,6 +37,16 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
     return new_file_lines;
 }
 
+pub fn has_imports(file_contents: Vec<String>) -> bool {
+    for line in file_contents {
+        if line.starts_with("@") {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 pub fn remove_imports(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
