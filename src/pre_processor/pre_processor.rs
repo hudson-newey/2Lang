@@ -53,6 +53,7 @@ pub fn pre_process(
 
     let mut macro_interpolate = interpolate_macros(&binary_strings.clone());
     macro_interpolate = interpolate_macros(&macro_interpolate.clone());
+
     let macro_complete = remove_comments(macro_interpolate.clone());
 
     // by this point the file all macros should have been fully expanded
