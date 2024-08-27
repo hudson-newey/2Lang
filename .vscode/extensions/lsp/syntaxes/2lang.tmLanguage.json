@@ -2,19 +2,53 @@
     "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
     "name": "2Lang",
     "patterns": [
-        {
-            "include": "#keywords"
-        },
-        {
-            "include": "#strings"
-        }
+        { "include": "#strings" },
+        { "include": "#comments" },
+        { "include": "#imports" },
+        { "include": "#macros" },
+        { "include": "#arguments" }
     ],
     "repository": {
-        "keywords": {
+        "strings": {
+            "name": "string.quoted.double.<%-languageId%>",
+            "begin": "\"",
+            "end": "\"",
             "patterns": [
                 {
-                    "name": "keyword.control.2lang",
-                    "match": "\\b(#for)\\b"
+                    "name": "constant.character.escape.<%-languageId%>",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.double-slash.<%-languageId%>",
+                    "match": "//.*"
+                }
+            ]
+        },
+        "imports": {
+            "patterns": [
+                {
+                    "name": "keyword.control.import.<%-languageId>",
+                    "match": "^@.+$"
+                }
+            ]
+        },
+        "macros": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.new.<%-languageId%>",
+                    "match": "^#.+?\\s"
+                }
+            ]
+        },
+        "arguments": {
+            "patterns": [
+                {
+                    "name": "variable.parameter",
+                    "match": ".*?(?=[\r\n]|$)"
                 }
             ]
         }
