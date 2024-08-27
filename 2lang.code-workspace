@@ -1,0 +1,17 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.insertFinalNewline": true,
+        "editor.rulers": [80, 120],
+    },
+    "extensions": {
+        "recommendations": [
+            "editorconfig.editorconfig",
+            "streetsidesoftware.code-spell-checker"
+        ]
+    }
+}
