@@ -25,25 +25,25 @@
 // disable a segment
 // this is useful for disabling the elf header during runtime by simply changing
 // a single bit in the elf program header
-#(ELF::PROGRAM::TYPE::NULL)         00000000
+#(ELF::PROGRAM::TYPE::NULL)         0000 0000 0000 0000 0000 0000 0000 0000
 // program headers of the TYPE::LOAD will be loaded into memory
-#(ELF::PROGRAM::TYPE::LOAD)         00000001
+#(ELF::PROGRAM::TYPE::LOAD)         0000 0001 0000 0000 0000 0000 0000 0000
 // contains information required for dynamically linked binaries
 // it is used by the operating system to load shared libraries related to an
 // executable
-#(ELF::PROGRAM::TYPE::DYNAMIC)      00000010
+#(ELF::PROGRAM::TYPE::DYNAMIC)      0000 0010 0000 0000 0000 0000 0000 0000
 // contains the path to the interpreter
 // this is used by the operating system to load the correct interpreter
 // executables should have this type of program header
 // while shared libraries should have the DYNAMIC type
-#(ELF::PROGRAM::TYPE::INTERP)       00000011
+#(ELF::PROGRAM::TYPE::INTERP)       0000 0011 0000 0000 0000 0000 0000 0000
 // holds information for debugger tools, etc...
-#(ELF::PROGRAM::TYPE::NOTE)         00000100
+#(ELF::PROGRAM::TYPE::NOTE)         0000 0100 0000 0000 0000 0000 0000 0000
 //! do not use
-#(ELF::PROGRAM::TYPE::SHLIB)        00000101
+#(ELF::PROGRAM::TYPE::SHLIB)        0000 0101 0000 0000 0000 0000 0000 0000
 // program header: specifies where the program header will be loaded into memory
-#(ELF::PROGRAM::TYPE::PHDR)         00000110
-#(ELF::PROGRAM::TYPE::TLS)          00000111
+#(ELF::PROGRAM::TYPE::PHDR)         0000 0110 0000 0000 0000 0000 0000 0000
+#(ELF::PROGRAM::TYPE::TLS)          0000 0111 0000 0000 0000 0000 0000 0000
 #(ELF::PROGRAM::TYPE::CUSTOM)       $
 
 // where the associated segment header is located in the file

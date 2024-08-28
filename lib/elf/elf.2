@@ -33,7 +33,6 @@
 #(ELF::ABI::HP_UX)       00000001
 #(ELF::ABI::NET_BSD)     00000010
 #(ELF::ABI::LINUX)       00000011
-#(ELF::ABI::CUSTOM)      $
 
 // you should only really be using these macros in your program
 // these elf headers are optimized for AMD64 processors
@@ -48,9 +47,9 @@
 #(ELF::TYPE_EXEC)    00000010 (TYPES::NULL)
 #(ELF::TYPE_DYN)     00000011 (TYPES::NULL)
 #(ELF::TYPE_CORE)    00000100 (TYPES::NULL)
-#(ELF::TYPE_CUSTOM)  $        (TYPES::NULL)
 
-#(ELF::MACHINE_X86)     00000100 (TYPES::NULL)
+// #(ELF::MACHINE_X86)     00000100 (TYPES::NULL)
+#(ELF::MACHINE_X86)     00000011 (TYPES::NULL)
 #(ELF::MACHINE_MIPS)    00001000 (TYPES::NULL)
 #(ELF::MACHINE_ARM)     00101000 (TYPES::NULL)
 #(ELF::MACHINE_AMD64)   00111110 (TYPES::NULL)
