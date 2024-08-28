@@ -1,0 +1,109 @@
+// while this template is useful, it makes some assumptions about you program
+// which are not ideal
+// for example, creating a program with this template will use up more memory
+// than would typically be necessary
+// it should primarily be used if you are making a simple program or exploring
+// the language and you do not care about the memory usage and performance
+//
+// usage: @/lib/templates/elf/x86-template.2
+// at the end of the tempalte you can start writing your program
+
+@lib/elf/elf.2
+@lib/memory/padding.2
+@lib/elf/program.2
+@lib/asm/nasm.2
+
+(ELF::ELF)
+(ELF::32_BIT_CLASS_HEADER)
+(ELF::DATA_LSB_HEADER)
+(ELF::VERSION_HEADER)
+(ELF::ABI::SYSTEM_V)
+
+(PADDING::32_ZERO_BITS)
+
+(ELF::TYPE_EXEC)
+(ELF::MACHINE_X86)
+
+(ELF::VERSION_HEADER)
+00000000 00000000 00000000
+
+// pointer to the programs entry point
+// TODO: figure out how to calculate this using macros
+01010100
+10000000
+00000100
+00001000
+
+// pointer to where the program headers begin
+//? (ELF::PHOFF) 0011 0100 0000 0000 0000
+0011 0100
+00000000 00000000 00000000
+
+// we do not have any section headers
+// therefore, we set the pointer to the section headers to zero
+//? (ELF::SHOFF) (PADDING::16_ZERO_BITS)
+//? (ELF::FLAGS) (PADDING::16_ZERO_BITS)
+(PADDING::16_ZERO_BITS)
+(PADDING::16_ZERO_BITS)
+
+// TODO: fix this
+//? (ELF::EHSIZE) 0011 0100
+0011 0100
+0000 0000
+
+//? (ELF::PHENTSIZE) 0010 0000
+0010 0000 0000 0000
+
+//? (ELF::PHNUM) 0001 0000
+0000 0001 0000 0000
+
+//? (ELF::SHENTSIZE) 0010 1000
+0010 1000 0000 0000
+
+//? (ELF::SHNUM) 0000 0000
+0000 0000 0000 0000
+
+//? (ELF::SHSTRNDX) 0000 0000
+0000 0000 0000 0000
+
+// PROGRAM HEADERS
+
+(ELF::PROGRAM::TYPE::LOAD)
+
+// file offset where the segment begins
+//? (ELF::PROGRAM::OFFSET) 0101 0100 0000 0000 0000
+01010100
+00000000 00000000 00000000
+
+// virtual address of the segment in memory
+//? (ELF::PROGRAM::VADDR) 0101 0100 1000 0000 0000
+0101 0100 1000 0000 0000 0100 0000 1000
+
+// physical address of the segment
+//? (ELF::PROGRAM::PADDR) 0000 0000 0000 0000 0000
+(PADDING::16_ZERO_BITS)
+
+//! warning: this file allocates 0100 1100 0000 0000 0000 bytes of memory
+//! this is probably more than you need, but I have done this so that you can
+//! quickly get started without having to worry about memory allocation
+// size in bytes of the segment in the file
+//? (ELF::PROGRAM::FILESZ) 0000 1100 0000 0000 0000
+0100 1100
+00000000 00000000 00000000
+
+// size in bytes of the segment in memory
+//? (ELF::PROGRAM::MEMSZ) 0000 1100 0000 0000 0000
+0100 1100
+00000000 00000000 00000000
+
+// segment-dependent flags
+//? (ELF::PROGRAM::FLAGS) 0000 0101 0000 0000 0000
+0000 0101
+00000000 00000000 00000000
+
+// min mem alignment in bytes
+//? (ELF::PROGRAM::ALIGN) 0000 0000 0001 0000 0000
+0000 0000
+0001 0000
+0000 0000
+0000 0000

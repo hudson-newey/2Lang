@@ -5,10 +5,18 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
 
     let mut line_number: usize = 0;
 
+    let mut evaluated_imports: Vec<String> = Vec::new();
     for line in file_lines {
         line_number += 1;
 
         if line.starts_with("@") {
+            // we do not want to import the same file multiple times
+            // however, we want to allow using the same template multiple times
+            if evaluated_imports.contains(&line) && !line.contains(".template.2") {
+                print!("Skipping import {}", line);
+                continue;
+            }
+
             // remove the @ symbol and read the file at the remaining file path
             // replace the line with the contents of the file
             let imported_file_path: String = line[1..].to_string();
@@ -29,6 +37,8 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
             }
 
             new_file_lines.push("\n".to_string());
+
+            evaluated_imports.push(line);
         } else {
             new_file_lines.push(line);
         }

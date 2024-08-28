@@ -20,7 +20,7 @@ The worlds most efficient systems programming language
 Doc comments can be used to automatically generate documentation for a file
 or a set of files.
 
-The format is heavily inspired by Java doc & JavaScript's JSDoc
+The format is heavily inspired by Java Doc & JavaScript's JSDoc
 
 ```ts
 /**
@@ -112,26 +112,6 @@ source input.
         print(f"#${ascii_character} {i}")
 }
 ```
-
-## Standard Library (`@lib/std.2`) Symbols & Words
-
-```sh
-PRINT "message"
-```
-
-The print keyword is used to print out text to the screen (planned; not currently functional)
-
----
-
-```sh
-;
-```
-
-The semi-column is an execute command. It will execute all commands in the CPU registers.
-
-## Conventions
-
-As there is currently no syntax highlighting, we write in all capital letters (similar to SQL)
 
 ## Examples
 
