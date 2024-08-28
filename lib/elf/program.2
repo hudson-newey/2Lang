@@ -1,0 +1,76 @@
+// program header
+//
+// 32 bit headers:
+//
+// type
+// offset bytes into file
+// vaddr  virtual addr at runtime
+// paddr  physical addr at runtime
+// filesz bytes in file
+// memsz  bytes in mem at runtime
+// flags
+// align  min mem alignment in bytes
+//
+// 64 bit headers:]
+// type
+// flags
+// offset bytes into file
+// vaddr  virtual addr at runtime
+// paddr  physical addr at runtime
+// filesz bytes in file
+// memsz  bytes in mem at runtime
+// align  min mem alignment in bytes
+#(ELF::PROGRAM::PROGRAM_HEADER) $ $ $ $ $ $ $ $
+
+// disable a segment
+// this is useful for disabling the elf header during runtime by simply changing
+// a single bit in the elf program header
+#(ELF::PROGRAM::TYPE::NULL)         00000000
+// program headers of the TYPE::LOAD will be loaded into memory
+#(ELF::PROGRAM::TYPE::LOAD)         00000001
+// contains information required for dynamically linked binaries
+// it is used by the operating system to load shared libraries related to an
+// executable
+#(ELF::PROGRAM::TYPE::DYNAMIC)      00000010
+// contains the path to the interpreter
+// this is used by the operating system to load the correct interpreter
+// executables should have this type of program header
+// while shared libraries should have the DYNAMIC type
+#(ELF::PROGRAM::TYPE::INTERP)       00000011
+// holds information for debugger tools, etc...
+#(ELF::PROGRAM::TYPE::NOTE)         00000100
+//! do not use
+#(ELF::PROGRAM::TYPE::SHLIB)        00000101
+// program header: specifies where the program header will be loaded into memory
+#(ELF::PROGRAM::TYPE::PHDR)         00000110
+#(ELF::PROGRAM::TYPE::TLS)          00000111
+#(ELF::PROGRAM::TYPE::CUSTOM)       $
+
+// where the associated segment header is located in the file
+#(ELF::PROGRAM::OFFSET)             $
+
+// where the first byte of the segment will be loaded into memory
+#(ELF::PROGRAM::VADDR)              $
+
+// where the first byte of the segment will be loaded into memory
+// this differs from the VADDR because the PADDR is the physical address
+// and should only be used for specialized use cases such as firmware drivers
+#(ELF::PROGRAM::PADDR)              $
+
+// the size of the segment in the file
+// if this is zero then the segment is defined by the program header
+// and does not have additional segment content
+#(ELF::PROGRAM::FILESZ)             $
+
+// the size of the segment in memory
+// this should always be greater than or equal to the FILESZ
+// if it is larger than the FILESZ then the additional memory will be zeroed
+#(ELF::PROGRAM::MEMSZ)              $
+
+// flags specify if the program is readable, writable, and executable
+// PF_X, PF_W, PF_R
+#(ELF::PROGRAM::FLAGS)              $
+
+// specifies if the segment should be aligned to a certain memory boundary
+// e.g. if the segment should be aligned with a 4 byte or 8 byte boundary
+#(ELF::PROGRAM::ALIGN)              $

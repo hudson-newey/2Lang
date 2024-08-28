@@ -20,38 +20,62 @@
 #(ELF::DATA_MSB_HEADER)    00000010
 
 // version headers
-#(ELF::VERSION_HEADER)     00000001
+#(ELF::VERSION_HEADER)          00000001
 
 // OS/ABI headers
-#(ELF::SYSTEM_V_HEADER)    00000000
+// it is common to use the system V ABI even if you are not using a system V OS
+// in my ELF::32 and ELF::64 macros I use the system V ABI regardless of the OS
+// if you want to roll your own ABI you can use the ELF::ABI::CUSTOM macro
+//
+// I have not created a macro for the ABI version because not many people use
+// any version beyond version zero (0)
+#(ELF::ABI::SYSTEM_V)    00000000
+#(ELF::ABI::HP_UX)       00000001
+#(ELF::ABI::NET_BSD)     00000010
+#(ELF::ABI::LINUX)       00000011
+#(ELF::ABI::CUSTOM)      $
 
 // you should only really be using these macros in your program
 // these elf headers are optimized for AMD64 processors
 // you might have the change the data headers for different processors
-#(ELF::32) (ELF::ELF) (ELF::32_BIT_CLASS_HEADER) (ELF::DATA_LSB_HEADER) (ELF::VERSION_HEADER) (ELF::SYSTEM_V_HEADER) (PADDING::64_ZERO_BITS)
-#(ELF::64) (ELF::ELF) (ELF::64_BIT_CLASS_HEADER) (ELF::DATA_LSB_HEADER) (ELF::VERSION_HEADER) (ELF::SYSTEM_V_HEADER) (PADDING::64_ZERO_BITS)
+#(ELF::32) (ELF::ELF) (ELF::32_BIT_CLASS_HEADER) (ELF::DATA_LSB_HEADER) (ELF::VERSION_HEADER) (ELF::ABI::SYSTEM_V) (PADDING::64_ZERO_BITS)
+#(ELF::64) (ELF::ELF) (ELF::64_BIT_CLASS_HEADER) (ELF::DATA_LSB_HEADER) (ELF::VERSION_HEADER) (ELF::ABI::SYSTEM_V) (PADDING::64_ZERO_BITS)
 
 // EHDR
 
+#(ELF::TYPE_NONE)    00000000 (TYPES::NULL)
 #(ELF::TYPE_REL)     00000001 (TYPES::NULL)
 #(ELF::TYPE_EXEC)    00000010 (TYPES::NULL)
 #(ELF::TYPE_DYN)     00000011 (TYPES::NULL)
 #(ELF::TYPE_CORE)    00000100 (TYPES::NULL)
+#(ELF::TYPE_CUSTOM)  $        (TYPES::NULL)
 
-#(ELF::MACHINE_x86)  00111110 (TYPES::NULL)
+#(ELF::MACHINE_X86)     00000100 (TYPES::NULL)
+#(ELF::MACHINE_MIPS)    00001000 (TYPES::NULL)
+#(ELF::MACHINE_ARM)     00101000 (TYPES::NULL)
+#(ELF::MACHINE_AMD64)   00111110 (TYPES::NULL)
+#(ELF::MACHINE_AMDV8)   10110111 (TYPES::NULL)
+#(ELF::MACHINE_RISC_V)  11110011 (TYPES::NULL)
 
-#(ELF::VERSION)          00000001 (TYPES::NULL)
-#(ELF::VERSION_CUSTOM)   $ (TYPES::NULL)
+#(ELF::ENTRY) $
 
-#(ELF::ENTRY)            (PADDING::16_ZERO_BITS) (TYPES::NULL) $
-
-// TODO: I haven't completed everything below this point
-#(ELF::PHOFF)        (HELPERS::NOOP)
-#(ELF::SHOFF)        (HELPERS::NOOP)
-#(ELF::FLAGS)        (HELPERS::NOOP)
-#(ELF::EHSIZE)       (HELPERS::NOOP)
-#(ELF::PHENTSIZE)    (HELPERS::NOOP)
-#(ELF::PHNUM)        (HELPERS::NOOP)
-#(ELF::SHENTSIZE)    (HELPERS::NOOP)
-#(ELF::SHNUM)        (HELPERS::NOOP)
-#(ELF::SHSTRNDX)     (HELPERS::NOOP)
+// program headers offset (relative to the start of the file)
+// Hint: this should probably be a ELF::PROGRAM::PROGRAM_HEADER
+#(ELF::PHOFF)        $
+// section headers offset (relative to the start of the file)
+#(ELF::SHOFF)        $
+// platform specific flags. probably should just set to (TYPES::NULL)
+#(ELF::FLAGS)        $
+// size of the ELF header
+#(ELF::EHSIZE)       $
+// size per program header
+#(ELF::PHENTSIZE)    $
+// number of program headers
+#(ELF::PHNUM)        $
+// size per section header
+#(ELF::SHENTSIZE)    $
+// number of section headers
+#(ELF::SHNUM)        $
+// section table string table index
+// this is used to resolve the names of the section headers
+#(ELF::SHSTRNDX)     $

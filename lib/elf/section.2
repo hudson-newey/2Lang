@@ -1,0 +1,36 @@
+// section headers are commonly used during the linking stage and can even be
+// removed from the final binary
+
+// name
+// type
+// flags
+// addr
+// offset   bytes
+// size     bytes
+// link
+// info
+// addralign
+// entsize
+#(ELF::SECTION::SECTION_HEADER) $ $ $ $ $ $ $ $ $ $
+
+// an offset into the section header string table
+#(ELF::SECTION::NAME) $
+
+#(ELF::SECTION::TYPE)                       $
+#(ELF::SECTION::TYPE::NULL)                 00000000
+#(ELF::SECTION::TYPE::PROGBITS)             00000001
+#(ELF::SECTION::TYPE::SYMTAB)               00000010
+#(ELF::SECTION::TYPE::STRTAB)               00000011
+#(ELF::SECTION::TYPE::RELA)                 00000100
+#(ELF::SECTION::TYPE::HASH)                 00000101
+#(ELF::SECTION::TYPE::DYNAMIC)              00000110
+#(ELF::SECTION::TYPE::NOTE)                 00000111
+#(ELF::SECTION::TYPE::NOBITS)               00001000
+#(ELF::SECTION::TYPE::REL)                  00001001
+#(ELF::SECTION::TYPE::SHLIB)                00001010
+#(ELF::SECTION::TYPE::DYNSYM)               00001011
+
+#(ELF::SECTION::FLAG)                       $
+#(ELF::SECTION::FLAG::WRITE)                00000001
+#(ELF::SECTION::FLAG::ALLOC)                00000010
+#(ELF::SECTION::FLAG::EXECINSTR)            00000100

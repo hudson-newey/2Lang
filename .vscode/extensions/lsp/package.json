@@ -1,25 +1,38 @@
 {
-  "name": "2lang",
-  "displayName": "2Lang",
-  "description": "2Lang language support for Visual Studio Code",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.92.0"
-  },
-  "categories": [
-    "Programming Languages"
-  ],
-  "contributes": {
-    "languages": [{
-      "id": "2lang",
-      "aliases": ["2Lang", "2lang"],
-      "extensions": [".2"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "2lang",
-      "scopeName": "source.2",
-      "path": "./syntaxes/2lang.tmLanguage.json"
-    }]
-  }
+    "name": "2lang",
+    "displayName": "2Lang",
+    "description": "2Lang language support for Visual Studio Code",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.92.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "2lang",
+                "aliases": [
+                    "2Lang",
+                    "2lang"
+                ],
+                "extensions": [
+                    ".2"
+                ],
+                "icon": {
+                    "light": "./icons/2lang.svg",
+                    "dark": "./icons/2lang.svg"
+                },
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "2lang",
+                "scopeName": "source.2",
+                "path": "./syntaxes/2lang.tmLanguage.json"
+            }
+        ]
+    }
 }

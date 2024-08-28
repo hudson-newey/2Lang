@@ -8,6 +8,42 @@ The worlds most efficient systems programming language
 
 ```C
 // this is a comment and will be ignored
+
+/*
+    This is a block comment and will be ignored
+    it can span multiple lines
+*/
+```
+
+### Doc-gen Comments
+
+Doc comments can be used to automatically generate documentation for a file
+or a set of files.
+
+The format is heavily inspired by Java doc & JavaScript's JSDoc
+
+```ts
+/**
+ * @summary
+ * This is a short description of a macro / function
+ *
+ * @description
+ * This is a longer description of the macro / function
+ * it can be multiple lines long
+ *
+ * @author First Last
+ * @version 1.0.0
+ *
+ * @since 1.0.0
+ * @see 2lang.awt
+ *
+ * @deprecated As of version 1.0
+ *
+ * @param fn An inner function to be executed
+ * @param converter A converter function that will be applied to the output
+ *
+ * @returns A new value
+ */
 ```
 
 ### Pre-Processor Macros

@@ -1,0 +1,13 @@
+// segment headers
+//
+// these headers are commonly used during runtime
+// hint: you should probably use the ELF::PROGRAM::PROGRAM_HEADER macro here
+// segment headers are just an implementation of the program headers interface
+
+#(ELF::SEGMENT::SEGMENT_HEADER) $
+
+// you can use the following macros to have semantically correct data, code,
+// and linked object section headers
+#(ELF::SEGMENT::DATA_HEADER) (SHDRS::SECTION_HEADER)
+#(ELF::SEGMENT::CODE_HEADER) (SHDRS::SECTION_HEADER)
+#(ELF::SEGMENT::LINKED_OBJECT_HEADER) (SHDRS::SECTION_HEADER)
