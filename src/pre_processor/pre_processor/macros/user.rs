@@ -86,7 +86,7 @@ pub fn interpolate_macros(target: &Vec<String>) -> Vec<String> {
         for searching_macro in &macros {
             let searching_macro_key: String = get_macro_key(searching_macro.clone());
 
-            if line.contains(&*searching_macro_key) {
+            if line.contains(&*searching_macro_key) && !line.starts_with("#") {
                 let macro_value: String = get_macro_value(searching_macro.clone());
 
                 let interpolated_macro_value: String =
