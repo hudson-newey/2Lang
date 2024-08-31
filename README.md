@@ -166,6 +166,7 @@ should replace _$_ with 1111
 - `-b`, `--generate-intermediate` takes an intermediary output (_.bin_) file produced by the pre-processor
 - `-d`, `--debug` Run in debug mode (log file reads, etc...)
 - `-s`, `--stdout` Output the final file contents to stdout
+- `-o`, `--output` Specify the output file name
 
 ### Pre-Processor Options
 

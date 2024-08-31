@@ -29,7 +29,21 @@
                 {
                     "name": "comment.block.<%-languageId%>",
                     "begin": "/\\*",
-                    "end": "\\*/"
+                    "end": "\\*/",
+                    "patterns": [
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@return"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@description"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@param"
+                        }
+                    ]
                 }
             ]
         },

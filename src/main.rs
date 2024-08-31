@@ -5,14 +5,13 @@ mod compiler;
 mod pre_processor;
 mod program;
 mod optimizer;
+mod modules;
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let file_name: &String = if args.len() > 1 {
-        &args[1]
+fn build(args: &Vec<String>) {
+    let file_name: &String = if args.len() > 2 {
+        &args[2]
     } else {
-        println!("Usage: {} <file_name> [options]", args[0]);
+        println!("Usage: {} build <file_name> [options]", args[0]);
         exit(1)
     };
 
@@ -61,5 +60,32 @@ fn main() {
         Command::new(output_file_path)
             .spawn()
             .expect("failed to execute process");
+    }
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 1 {
+        println!("Usage: {} <command> [options]", args[0]);
+        exit(1);
+    }
+
+    let command: &String = &args[1];
+
+    if command == "build" {
+        build(&args);
+    } else if command == "mod" {
+        if args.len() < 3 {
+            println!("Usage: {} mod <module> [options]", args[0]);
+            exit(1);
+        }
+
+        let module_name = &args[2];
+
+        modules::modules::run_module(module_name.clone(), args.clone());
+    } else {
+        println!("Command {} not found", command);
+        exit(1);
     }
 }

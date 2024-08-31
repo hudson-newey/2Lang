@@ -30,12 +30,14 @@ fn remove_block_comments(file_contents: Vec<String>) -> Vec<String> {
     for line in file_contents {
         if line.starts_with(BLOCK_COMMENT_PREFIX) {
             is_inside_block_comment = true;
-        } if line.contains(BLOCK_COMMENT_SUFFIX) {
-            is_inside_block_comment = false;
         }
 
         if !is_inside_block_comment {
-            new_file_contents.push(line);
+            new_file_contents.push(line.clone());
+        }
+
+        if line.contains(BLOCK_COMMENT_SUFFIX) {
+            is_inside_block_comment = false;
         }
     }
 
