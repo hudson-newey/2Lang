@@ -62,6 +62,8 @@ e.g.
 #printNewLine PRINT "$1\n"
 ```
 
+By using currying, you are able to create functions which take two arguments.
+
 ### Imports
 
 ```sh
@@ -69,8 +71,6 @@ e.g.
 ```
 
 Will import a file to be used
-
-By using currying, you are able to create functions which take two arguments.
 
 ### Pre-Processor Code Execution
 
