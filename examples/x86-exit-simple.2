@@ -1,5 +1,13 @@
+/*
+    This is an example of a simple program that exits with a status code of 0.
+    it uses a template, assembly macros, comments and binary to demonstrate
+    how to use 2Lang.
+*/
+
 @lib/templates/elf/x86.template.2
 
 (NASM::MOV) (NASM::EAX) 00000001 0000 0000 0000 0000 0000 0000
 (NASM::MOV) (NASM::EBX) 00000000 0000 0000 0000 0000 0000 0000
+//                      ^ program exit code
+
 (NASM::SYSCALL)

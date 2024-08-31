@@ -1,3 +1,7 @@
+const LINE_COMMENT_PREFIX: &str = "//";
+const BLOCK_COMMENT_PREFIX: &str = "/*";
+const BLOCK_COMMENT_SUFFIX: &str = "*/";
+
 pub fn remove_comments(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents = file_contents;
 
@@ -11,7 +15,7 @@ fn remove_single_line_comments(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
     for line in file_contents {
-        if !line.starts_with("//") {
+        if !line.starts_with(LINE_COMMENT_PREFIX) {
             new_file_contents.push(line);
         }
     }
@@ -20,5 +24,20 @@ fn remove_single_line_comments(file_contents: Vec<String>) -> Vec<String> {
 }
 
 fn remove_block_comments(file_contents: Vec<String>) -> Vec<String> {
-    return file_contents;
+    let mut new_file_contents = Vec::new();
+
+    let mut is_inside_block_comment = false;
+    for line in file_contents {
+        if line.starts_with(BLOCK_COMMENT_PREFIX) {
+            is_inside_block_comment = true;
+        } if line.contains(BLOCK_COMMENT_SUFFIX) {
+            is_inside_block_comment = false;
+        }
+
+        if !is_inside_block_comment {
+            new_file_contents.push(line);
+        }
+    }
+
+    return new_file_contents;
 }

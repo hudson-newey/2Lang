@@ -1,25 +1,20 @@
-// program header
-//
-// 32 bit headers:
-//
-// type
-// offset bytes into file
-// vaddr  virtual addr at runtime
-// paddr  physical addr at runtime
-// filesz bytes in file
-// memsz  bytes in mem at runtime
-// flags
-// align  min mem alignment in bytes
-//
-// 64 bit headers:]
-// type
-// flags
-// offset bytes into file
-// vaddr  virtual addr at runtime
-// paddr  physical addr at runtime
-// filesz bytes in file
-// memsz  bytes in mem at runtime
-// align  min mem alignment in bytes
+/**
+ * @description
+ * A program header is a struct that contains information about a segment in an
+ * ELF file. It is used by the operating system to load the program into memory.
+ * The program header contains information about the segment's type, offset,
+ * virtual address, physical address, size in the file, size in memory, flags,
+ * and alignment.
+ *
+ * @param type
+ * @param offset    bytes into file
+ * @param vaddr     virtual addr at runtime
+ * @param paddr     physical addr at runtime
+ * @param filesz    bytes in file
+ * @param memsz     bytes in mem at runtime
+ * @oaram flags
+ * @param align     min mem alignment in bytes
+ */
 #(ELF::PROGRAM::PROGRAM_HEADER) $ $ $ $ $ $ $ $
 
 // disable a segment

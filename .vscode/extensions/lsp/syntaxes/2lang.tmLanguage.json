@@ -25,6 +25,11 @@
                 {
                     "name": "comment.line.double-slash.<%-languageId%>",
                     "match": "//.*"
+                },
+                {
+                    "name": "comment.block.<%-languageId%>",
+                    "begin": "/\\*",
+                    "end": "\\*/"
                 }
             ]
         },
