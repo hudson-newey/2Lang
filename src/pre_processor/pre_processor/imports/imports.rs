@@ -1,4 +1,5 @@
-use crate::pre_processor::pre_processor::{util, errors};
+use crate::pre_processor::pre_processor::{errors, util};
+use crate::tokens::tokens;
 
 pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<String> {
     let mut new_file_lines: Vec<String> = Vec::new();
@@ -9,7 +10,7 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
     for line in file_lines {
         line_number += 1;
 
-        if line.starts_with("@") {
+        if line.starts_with(tokens::IMPORT) {
             // we do not want to import the same file multiple times
             // however, we want to allow using the same template multiple times
             if evaluated_imports.contains(&line) && !line.contains(".template.2") {
@@ -49,7 +50,7 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
 
 pub fn has_imports(file_contents: Vec<String>) -> bool {
     for line in file_contents {
-        if line.starts_with("@") {
+        if line.starts_with(tokens::IMPORT) {
             return true;
         }
     }
@@ -61,7 +62,7 @@ pub fn remove_imports(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
     for line in file_contents {
-        if !line.starts_with("@") {
+        if !line.starts_with(tokens::IMPORT) {
             new_file_contents.push(line);
         }
     }

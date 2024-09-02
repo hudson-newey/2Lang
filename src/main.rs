@@ -1,6 +1,7 @@
 use std::{env, fs};
 use std::process::{exit, Command};
 
+mod tokens;
 mod compiler;
 mod pre_processor;
 mod program;

@@ -1,6 +1,4 @@
-const LINE_COMMENT_PREFIX: &str = "//";
-const BLOCK_COMMENT_PREFIX: &str = "/*";
-const BLOCK_COMMENT_SUFFIX: &str = "*/";
+use crate::tokens::tokens;
 
 pub fn remove_comments(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents = file_contents;
@@ -15,7 +13,7 @@ fn remove_single_line_comments(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
     for line in file_contents {
-        if !line.starts_with(LINE_COMMENT_PREFIX) {
+        if !line.starts_with(tokens::LINE_COMMENT) {
             new_file_contents.push(line);
         }
     }
@@ -28,7 +26,7 @@ fn remove_block_comments(file_contents: Vec<String>) -> Vec<String> {
 
     let mut is_inside_block_comment = false;
     for line in file_contents {
-        if line.starts_with(BLOCK_COMMENT_PREFIX) {
+        if line.starts_with(tokens::BLOCK_COMMENT_START) {
             is_inside_block_comment = true;
         }
 
@@ -36,7 +34,7 @@ fn remove_block_comments(file_contents: Vec<String>) -> Vec<String> {
             new_file_contents.push(line.clone());
         }
 
-        if line.contains(BLOCK_COMMENT_SUFFIX) {
+        if line.contains(tokens::BLOCK_COMMENT_END) {
             is_inside_block_comment = false;
         }
     }

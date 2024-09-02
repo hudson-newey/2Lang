@@ -1,8 +1,10 @@
+use crate::tokens::tokens;
+
 pub fn remove_macros(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
     for line in file_contents {
-        if !line.starts_with("#") {
+        if !line.starts_with(tokens::MACRO) {
             new_file_contents.push(line);
         }
     }
@@ -14,7 +16,7 @@ pub fn get_macros(file_lines: Vec<String>) -> Vec<String> {
     let mut macros: Vec<String> = Vec::new();
 
     for line in file_lines {
-        if line.starts_with("#") {
+        if line.starts_with(tokens::MACRO) {
             // push to the macros vector but remove the # symbol
             macros.push(line[1..].to_string());
         }
@@ -44,7 +46,7 @@ pub fn replace_macro_parameter(macro_value: String, calling_line: String) -> Str
     }
 
     // replace all occurrences of $ with the macro_value
-    return macro_value.replacen("$", &parameter_value, 1);
+    return macro_value.replacen(tokens::MACRO_PARAMETER, &parameter_value, 1);
 }
 
 // a macro value is defined as everything after a space or tab character
@@ -86,7 +88,7 @@ pub fn interpolate_macros(target: &Vec<String>) -> Vec<String> {
         for searching_macro in &macros {
             let searching_macro_key: String = get_macro_key(searching_macro.clone());
 
-            if line.contains(&*searching_macro_key) && !line.starts_with("#") {
+            if line.contains(&*searching_macro_key) && !line.starts_with(tokens::MACRO) {
                 let macro_value: String = get_macro_value(searching_macro.clone());
 
                 let interpolated_macro_value: String =
