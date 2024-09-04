@@ -1,0 +1,12 @@
+// ! Warning: This macros is currently un-tested and may not work as expected.
+/**
+ * @description
+ * Converts a string to a binary value during compile time.
+ *
+ * @param {string} string_to_convert
+ */
+#(STRING) @!/usr/bin/env python{
+    to_convert = $
+    binary = to_convert.join(format(ord(char), '08b') for char in s)
+    print(binary)
+}

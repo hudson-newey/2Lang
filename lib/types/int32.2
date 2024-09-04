@@ -22,5 +22,10 @@
 #(int:8)    (int32::8)
 #(int:9)    (int32::9)
 
-// TODO: this should use a pre-processor script
-@{}
+#(INT)    (INT32)
+
+#(INT32) @!/usr/bin/env python{
+    to_convert = $
+    binary = format(to_convert, '032b')
+    print(binary)
+}

@@ -9,5 +9,8 @@
 #(int16::8) 00000000 00001000
 #(int16::9) 00000000 00001001
 
-// TODO: this should use a pre-processor script
-@{}
+#(INT16) @!/usr/bin/env python{
+    to_convert = $
+    binary = format(to_convert, '016b')
+    print(binary)
+}
