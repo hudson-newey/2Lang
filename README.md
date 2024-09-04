@@ -72,31 +72,6 @@ By using currying, you are able to create functions which take two arguments.
 
 Will import a file to be used
 
-### Pre-Processor Code Execution (not yet implemented)
-
-You can run code at compile time using the `@{}` syntax
-
-It is best to explain this with "C-Like" syntax
-
-For example, if I wanted to create macros for all the printable ASCII characters (A-Z, a-z), I could write a pre-processor code execution block like the following.
-
-```c
-// this std lib library does not currently exist
-// but I do have plans to create 2lang C compiler macros
-@/lib/clang/clang.2
-@/lib/types/int8.2
-
-@{
-    #include <stdio.h>
-
-    for (int i = 65; i < 122; i++) {
-        printf("#%c %i\n", i);
-    }
-}
-```
-
-Note that the example above would not work as pre-processor block above would not work because pre-processor blocks can only run 2lang code, and not C-code. However, for this example, I have used C for clarity.
-
 ### Pre-Processor Code Execution (Using Shell STDOUT)
 
 Alternatively, if you (understandably) don't want to create binary macros
@@ -114,24 +89,6 @@ source input.
 ```
 
 ## Examples
-
-Hello World program
-
-```C
-@lib/std.2
-PRINT "Hello World!"
-```
-
----
-
-Cheat Hello World program
-
-```C
-@lib/helloWorld.2
-HELLO_WORLD
-```
-
----
 
 Localized macro example
 
