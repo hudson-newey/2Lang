@@ -7,6 +7,7 @@ mod util;
 
 use util::util::{read_file, write_to_file};
 use imports::imports::{remove_imports, interpolate_imports, has_imports};
+use code_execution::code_execution::{has_code_execution_statements, remove_interpreter_code_blocks, run_code_execution};
 use macros::user::{remove_macros, interpolate_macros};
 use macros::inbuilt::convert_strings_to_binary;
 use minification::comments::remove_comments;
@@ -41,14 +42,21 @@ pub fn pre_process(
         import_interpolated = remove_comments(intermediate_import_interpolate.clone());
     }
 
+    let mut code_execute_interpolated = import_interpolated.clone();
+    while has_code_execution_statements(code_execute_interpolated.clone()) {
+        code_execute_interpolated = run_code_execution(code_execute_interpolated.clone())
+    }
+
+    code_execute_interpolated = remove_interpreter_code_blocks(code_execute_interpolated);
+
     if *preserve_linked {
         let preserved_linked_file_path = format!("{}.linked", file_path);
-        write_to_file(preserved_linked_file_path, import_interpolated.clone());
+        write_to_file(preserved_linked_file_path, code_execute_interpolated.clone());
     }
 
     let binary_strings = match *expand_strings {
-        true => convert_strings_to_binary(import_interpolated.clone()),
-        false => import_interpolated.clone()
+        true => convert_strings_to_binary(code_execute_interpolated.clone()),
+        false => code_execute_interpolated.clone()
     };
 
     let mut macro_interpolate = interpolate_macros(&binary_strings.clone());

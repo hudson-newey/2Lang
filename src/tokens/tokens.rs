@@ -10,3 +10,4 @@ pub const MACRO_PARAMETER: &str = "$";
 
 pub const PRE_PROCESSOR_DIRECTIVE: &str = "@{";
 pub const PRE_PROCESSOR_DIRECTIVE_INTERPRETER: &str = "@!";
+pub const PRE_PROCESSOR_DIRECTIVE_END: &str = "}";

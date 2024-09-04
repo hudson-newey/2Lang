@@ -10,7 +10,10 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
     for line in file_lines {
         line_number += 1;
 
-        if line.starts_with(tokens::IMPORT) {
+        if line.starts_with(tokens::IMPORT)
+            && !line.starts_with(tokens::PRE_PROCESSOR_DIRECTIVE)
+            && !line.starts_with(tokens::PRE_PROCESSOR_DIRECTIVE_INTERPRETER)
+        {
             // we do not want to import the same file multiple times
             // however, we want to allow using the same template multiple times
             if evaluated_imports.contains(&line) && !line.contains(".template.2") {
@@ -51,7 +54,11 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
 pub fn has_imports(file_contents: Vec<String>) -> bool {
     for line in file_contents {
         if line.starts_with(tokens::IMPORT) {
-            return true;
+            if !line.starts_with(tokens::PRE_PROCESSOR_DIRECTIVE)
+                && !line.starts_with(tokens::PRE_PROCESSOR_DIRECTIVE_INTERPRETER)
+            {
+                return true;
+            }
         }
     }
 
@@ -62,7 +69,10 @@ pub fn remove_imports(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
     for line in file_contents {
-        if !line.starts_with(tokens::IMPORT) {
+        if !line.starts_with(tokens::IMPORT)
+            || line.starts_with(tokens::PRE_PROCESSOR_DIRECTIVE)
+            || line.starts_with(tokens::PRE_PROCESSOR_DIRECTIVE_INTERPRETER)
+        {
             new_file_contents.push(line);
         }
     }
