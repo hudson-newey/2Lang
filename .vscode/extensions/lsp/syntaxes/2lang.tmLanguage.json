@@ -5,6 +5,7 @@
         { "include": "#strings" },
         { "include": "#comments" },
         { "include": "#imports" },
+        { "include": "#code-execution" },
         { "include": "#macros" },
         { "include": "#arguments" }
     ],
@@ -51,7 +52,15 @@
             "patterns": [
                 {
                     "name": "keyword.control.import.<%-languageId>",
-                    "match": "^@.+$"
+                    "match": "(?!@!)(@.+){"
+                }
+            ]
+        },
+        "code-execution": {
+            "patterns": [
+                {
+                    "name": "keyword.control.new.<%-languageId%>",
+                    "match": "(@!.+){"
                 }
             ]
         },

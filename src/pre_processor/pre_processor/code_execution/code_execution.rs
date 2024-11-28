@@ -4,8 +4,8 @@ use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
 
 
-pub fn run_code_execution(contents: Vec<String>) -> Vec<String> {
-    return interpreter_code_execution(contents.clone());
+pub fn run_code_execution(contents: Vec<String>, debug: bool) -> Vec<String> {
+    return interpreter_code_execution(contents.clone(), debug);
 }
 
 pub fn has_code_execution_statements(contents: Vec<String>) -> bool {
@@ -71,7 +71,7 @@ fn execute_code(interpreter: String, code: Vec<String>) -> Vec<String> {
     return output;
 }
 
-fn interpreter_code_execution(contents: Vec<String>) -> Vec<String> {
+fn interpreter_code_execution(contents: Vec<String>, debug: bool) -> Vec<String> {
     let mut result = Vec::new();
 
     let mut code_interpreter = String::new();
@@ -91,11 +91,15 @@ fn interpreter_code_execution(contents: Vec<String>) -> Vec<String> {
         if !in_code_execution_block {
             result.push(line.clone());
         } else {
-            code_buffer.push(line.clone())
+            code_buffer.push(line.clone());
         }
 
         if line.contains(tokens::PRE_PROCESSOR_DIRECTIVE_END) {
             in_code_execution_block = false;
+
+            if debug {
+                println!("'{}': '{}'", code_interpreter.to_string(), line);
+            }
 
             let execution_output = execute_code(code_interpreter.to_string(), code_buffer);
             for output_line in execution_output {

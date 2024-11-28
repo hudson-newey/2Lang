@@ -56,11 +56,6 @@ pub fn output_to_stdout(cla: Vec<String>) -> bool {
         || cla.contains(&OUTPUT_TO_STDOUT_SHORT.to_string());
 }
 
-pub fn no_expand_strings(cla: Vec<String>) -> bool {
-    const NO_EXPAND_STRINGS: &str = "--no-expand-strings";
-    return cla.contains(&NO_EXPAND_STRINGS.to_string());
-}
-
 pub fn auto_run(cla: Vec<String>) -> bool {
     const AUTO_RUN: &str = "--run";
     return cla.contains(&AUTO_RUN.to_string());

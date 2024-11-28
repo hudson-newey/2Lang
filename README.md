@@ -129,7 +129,6 @@ should replace _$_ with 1111
 
 - `-p`, `--preserve-intermediate` preserve the output produced by the pre-processor
 - `--preserve-linked` Preserves the statically linked file (without macros expanded)
-- `--no-expand-strings` Does not expand strings to their binary representation
 
 ### Optimizer Options
 

@@ -21,31 +21,3 @@ pub fn write_to_file(file_path: String, contents: Vec<String>) {
             .expect("Something went wrong writing the file");
     }
 }
-
-pub fn find_text_between_quotation_marks(input: String) -> Vec<String> {
-    let mut result = Vec::new();
-    let mut inside_quotes = false;
-    let mut current_text = String::new();
-
-    for c in input.chars() {
-        match c {
-            '"' => {
-                // Toggle the inside_quotes flag when encountering a double quotation mark.
-                inside_quotes = !inside_quotes;
-
-                // If we've just closed a quotation, add the captured text to the result.
-                if !inside_quotes {
-                    result.push(current_text.clone());
-                    current_text.clear();
-                }
-            }
-            _ if inside_quotes => {
-                // If we're inside quotation marks, append the character to the current_text.
-                current_text.push(c);
-            }
-            _ => {}
-        }
-    }
-
-    return result;
-}

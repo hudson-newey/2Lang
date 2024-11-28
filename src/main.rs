@@ -9,6 +9,7 @@ mod optimizer;
 mod modules;
 
 fn build(args: &Vec<String>) {
+    let print_debug = program::cla::log_debug(args.clone());
     let file_name: &String = if args.len() > 2 {
         &args[2]
     } else {
@@ -16,32 +17,31 @@ fn build(args: &Vec<String>) {
         exit(1)
     };
 
-    if program::cla::log_debug(args.clone()) {
+    if print_debug {
         println!("\nargs: {:?}", args);
         println!("file name: {}\n", file_name);
     }
 
     let input_file_name: String = if program::cla::generate_intermediate(args.clone()) {
-        let should_expand_strings = !program::cla::no_expand_strings(args.clone());
         let should_preserve_linked = program::cla::preserve_linked(args.clone());
 
         pre_processor::pre_processor::pre_process(
             file_name.to_string(),
-            &should_expand_strings,
-            &should_preserve_linked
+            &should_preserve_linked,
+            print_debug
         )
     } else {
         file_name.to_string()
     };
 
-    if program::cla::log_debug(args.clone()) {
+    if print_debug {
         println!("File in: {}\n", input_file_name);
     }
 
     let compiled_file_path = compiler::read_file::read_file(input_file_name.clone());
     let output_file_path = program::cla::output_file_path(args.clone());
 
-    if program::cla::log_debug(args.clone()) {
+    if print_debug {
         println!("output file out: {}\n", output_file_path);
     }
 
