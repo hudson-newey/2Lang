@@ -4,9 +4,9 @@ const DOCGEN_PREFIX: &str = "/**";
 const DOCGEN_SUFFIX: &str = "*/";
 
 fn generate_file(path: String) {
-    let mut result = String::new();
+    let mut result: String = String::new();
 
-    let mut is_doc = false;
+    let mut is_doc: bool = false;
     for line in std::fs::read_to_string(&path)
         .expect("Something went wrong reading the file")
         .lines()
@@ -26,10 +26,10 @@ fn generate_file(path: String) {
     }
 
     // split the file path by slashes and get the last element
-    let file_name = path.split("/").last().unwrap();
-    let docs_file_name = String::from(file_name) + ".md";
+    let file_name: &str = path.split("/").last().unwrap();
+    let docs_file_name: String = String::from(file_name) + ".md";
 
-    let output_path = format!("build/{}", docs_file_name);
+    let output_path: String = format!("build/{}", docs_file_name);
     std::fs::write(output_path, result).expect("Unable to write file");
 
     println!("Generated documentation for {}", path);
@@ -43,7 +43,7 @@ pub fn main(args: Vec<String>) {
         exit(1);
     }
 
-    let files = args[2..].to_vec();
+    let files: Vec<String> = args[2..].to_vec();
     for file in files {
         generate_file(file);
     }

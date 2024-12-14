@@ -29,9 +29,9 @@ pub fn replace_macro_parameter(macro_value: String, calling_line: String) -> Str
     // split the calling_line by spaces
     // get the 2nd item in the array if it exists. If not, return the original macro_value
     // if the 2nd item in the split array exists, replace all occurrences of the '$' character with the 2nd item
-    let split_macro = calling_line
+    let split_macro: Vec<String> = calling_line
         .split(" ")
-        .map(|s| s.to_string())
+        .map(|s: &str| s.to_string())
         .collect::<Vec<String>>();
 
     // TODO: I should throw a compiler error here
@@ -52,7 +52,7 @@ pub fn replace_macro_parameter(macro_value: String, calling_line: String) -> Str
 // a macro value is defined as everything after a space or tab character
 // up to the first newline character
 pub fn get_macro_value(macro_value: String) -> String {
-    let start_index = match macro_value.find(" ") {
+    let start_index: usize = match macro_value.find(" ") {
         Some(index) => index,
         None => 0,
     };
@@ -61,7 +61,7 @@ pub fn get_macro_value(macro_value: String) -> String {
         return String::from("");
     }
 
-    let end_index = match macro_value.find("\n") {
+    let end_index: usize = match macro_value.find("\n") {
         Some(index) => index,
         None => macro_value.len(),
     };
@@ -74,7 +74,7 @@ pub fn get_macro_key(macro_value: String) -> String {
     // return everything before the first space
     return macro_value
         .split(" ")
-        .map(|s| s.to_string())
+        .map(|s: &str| s.to_string())
         .collect::<Vec<String>>()[0]
         .to_string();
 }
@@ -84,7 +84,7 @@ pub fn interpolate_macros(target: &Vec<String>) -> Vec<String> {
     let macros: Vec<String> = get_macros(target.clone());
 
     for line in target {
-        let mut line_replaced = false;
+        let mut line_replaced: bool = false;
         for searching_macro in &macros {
             let searching_macro_key: String = get_macro_key(searching_macro.clone());
 

@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{File, Permissions};
 use std::io::{self, Write};
 use std::os::unix::fs::PermissionsExt;
 
@@ -27,11 +27,11 @@ pub fn write_binary(binary: Vec<u8>, file_path: String) {
 
 fn write_file(file_path: String, binary: Vec<bool>) -> io::Result<()> {
     // Create a file for writing.
-    let mut file = File::create(file_path)?;
+    let mut file: File = File::create(file_path)?;
 
     // Create a buffer to store the bits.
     let mut buffer: u8 = 0;
-    let mut buffer_position = 0;
+    let mut buffer_position: u32 = 0;
 
     // Iterate through the binary and pack them into bytes.
     for bit in binary {
@@ -63,7 +63,7 @@ fn write_file(file_path: String, binary: Vec<bool>) -> io::Result<()> {
 }
 
 fn make_file_executable(file_path: String) {
-    let mut perms = std::fs::metadata(file_path.clone())
+    let mut perms: Permissions = std::fs::metadata(file_path.clone())
         .expect("Something went wrong getting the file permissions")
         .permissions();
 

@@ -32,15 +32,15 @@ pub fn output_file_path(cla: Vec<String>) -> String {
     // find the position of the output flag if it exists
     // if it does, return the next argument as the output file path
     // if not return the default file path
-    let output_file_path_position = cla
+    let output_file_path_position: Option<usize> = cla
         .iter()
-        .position(|x| x == &OUTPUT_FILE_PATH || x == &OUTPUT_FILE_PATH_SHORT);
+        .position(|x: &String| x == &OUTPUT_FILE_PATH || x == &OUTPUT_FILE_PATH_SHORT);
 
     if output_file_path_position.is_none() {
         return default_file_path;
     }
 
-    let output_file_path_position = output_file_path_position.unwrap();
+    let output_file_path_position: usize = output_file_path_position.unwrap();
 
     if output_file_path_position + 1 >= cla.len() {
         return default_file_path;

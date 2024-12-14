@@ -24,14 +24,14 @@ pub fn pre_process(file_path: String, preserve_linked: &bool, debug: bool) -> St
 
     // by removing comments first we ensure that macros and imports that are
     // commented out do not get processed by the pre-processor
-    let no_unit_comments = remove_comments(read_file(file_path.clone()));
+    let no_unit_comments: Vec<String> = remove_comments(read_file(file_path.clone()));
 
     // we interpolate imports first so that we can remove imports
     // and perform inbuilt macro operations to a single file
 
     let mut import_interpolated: Vec<String> = no_unit_comments.clone();
     while has_imports(import_interpolated.clone()) {
-        let intermediate_import_interpolate =
+        let intermediate_import_interpolate: Vec<String> =
             interpolate_imports(import_interpolated.clone(), file_path.clone());
 
         // we remove comments from the import expanded file so that macros that are
@@ -40,7 +40,7 @@ pub fn pre_process(file_path: String, preserve_linked: &bool, debug: bool) -> St
         import_interpolated = remove_comments(intermediate_import_interpolate.clone());
     }
 
-    let mut code_execute_interpolated = import_interpolated.clone();
+    let mut code_execute_interpolated: Vec<String> = import_interpolated.clone();
     while has_code_execution_statements(code_execute_interpolated.clone()) {
         code_execute_interpolated = run_code_execution(code_execute_interpolated.clone(), debug)
     }
@@ -48,24 +48,24 @@ pub fn pre_process(file_path: String, preserve_linked: &bool, debug: bool) -> St
     code_execute_interpolated = remove_interpreter_code_blocks(code_execute_interpolated);
 
     if *preserve_linked {
-        let preserved_linked_file_path = format!("{}.linked", file_path);
+        let preserved_linked_file_path: String = format!("{}.linked", file_path);
         write_to_file(
             preserved_linked_file_path,
             code_execute_interpolated.clone(),
         );
     }
 
-    let mut macro_interpolate = interpolate_macros(&code_execute_interpolated.clone());
+    let mut macro_interpolate: Vec<String> = interpolate_macros(&code_execute_interpolated.clone());
     macro_interpolate = interpolate_macros(&macro_interpolate.clone());
 
-    let macro_complete = remove_comments(macro_interpolate.clone());
+    let macro_complete: Vec<String> = remove_comments(macro_interpolate.clone());
 
     // by this point the file all macros should have been fully expanded
     // and we can start removing parts of the file that are not ones or zeros
     // therefore reducing the size that the compiler needs to process
-    let no_imports_file = remove_imports(macro_complete.clone());
-    let result = remove_macros(no_imports_file.clone());
-    let minified_result = remove_whitespace(result.clone());
+    let no_imports_file: Vec<String> = remove_imports(macro_complete.clone());
+    let result: Vec<String> = remove_macros(no_imports_file.clone());
+    let minified_result: Vec<String> = remove_whitespace(result.clone());
 
     let new_file_path: String = format!("{}.bin", file_path);
     write_to_file(new_file_path.clone(), minified_result.clone());

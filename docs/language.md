@@ -2,6 +2,19 @@
 
 ## Reserved Symbols & Words
 
+I have tried to keep the number of symbols to a minimum so that you can build
+you own language with a limited subset of reserved words.
+
+- `//` Line comment
+- `/*` Block comment start
+- `*/` Block comment end
+- `@` Pre-processor import
+    - `@!` Pre-processor directive (intepretor) start
+    - `@{` Pre-processor directive start
+        - `}` Pre-processor directive end
+- `#` Macro declaration
+- `$` Macro declaration parameter
+
 ### Comments
 
 ```C

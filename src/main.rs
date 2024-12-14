@@ -1,15 +1,15 @@
-use std::{env, fs};
 use std::process::{exit, Command};
+use std::{env, fs};
 
-mod tokens;
 mod compiler;
+mod modules;
+mod optimizer;
 mod pre_processor;
 mod program;
-mod optimizer;
-mod modules;
+mod tokens;
 
 fn build(args: &Vec<String>) {
-    let print_debug = program::cla::log_debug(args.clone());
+    let print_debug: bool = program::cla::log_debug(args.clone());
     let file_name: &String = if args.len() > 2 {
         &args[2]
     } else {
@@ -23,12 +23,12 @@ fn build(args: &Vec<String>) {
     }
 
     let input_file_name: String = if program::cla::generate_intermediate(args.clone()) {
-        let should_preserve_linked = program::cla::preserve_linked(args.clone());
+        let should_preserve_linked: bool = program::cla::preserve_linked(args.clone());
 
         pre_processor::pre_processor::pre_process(
             file_name.to_string(),
             &should_preserve_linked,
-            print_debug
+            print_debug,
         )
     } else {
         file_name.to_string()
@@ -38,8 +38,8 @@ fn build(args: &Vec<String>) {
         println!("File in: {}\n", input_file_name);
     }
 
-    let compiled_file_path = compiler::read_file::read_file(input_file_name.clone());
-    let output_file_path = program::cla::output_file_path(args.clone());
+    let compiled_file_path: Vec<u8> = compiler::read_file::read_file(input_file_name.clone());
+    let output_file_path: String = program::cla::output_file_path(args.clone());
 
     if print_debug {
         println!("output file out: {}\n", output_file_path);
@@ -52,7 +52,7 @@ fn build(args: &Vec<String>) {
     }
 
     if program::cla::output_to_stdout(args.clone()) {
-        let contents = fs::read_to_string(output_file_path.clone())
+        let contents: String = fs::read_to_string(output_file_path.clone())
             .expect("Something went wrong reading the file");
         println!("{}", contents);
     }

@@ -1,8 +1,11 @@
 use crate::tokens::tokens;
-use tempfile::NamedTempFile;
+use std::borrow::Cow;
+use std::fs::{File, Permissions};
 use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
-
+use std::path::Path;
+use std::process::Output;
+use tempfile::NamedTempFile;
 
 pub fn run_code_execution(contents: Vec<String>, debug: bool) -> Vec<String> {
     return interpreter_code_execution(contents.clone(), debug);
@@ -19,9 +22,9 @@ pub fn has_code_execution_statements(contents: Vec<String>) -> bool {
 }
 
 pub fn remove_interpreter_code_blocks(contents: Vec<String>) -> Vec<String> {
-    let mut result = Vec::new();
+    let mut result: Vec<String> = Vec::new();
 
-    let mut in_code_execution_block = false;
+    let mut in_code_execution_block: bool = false;
     for line in contents {
         if line.starts_with(tokens::PRE_PROCESSOR_DIRECTIVE_INTERPRETER) {
             in_code_execution_block = true;
@@ -40,9 +43,9 @@ pub fn remove_interpreter_code_blocks(contents: Vec<String>) -> Vec<String> {
 }
 
 fn execute_code(interpreter: String, code: Vec<String>) -> Vec<String> {
-    let named_temp_file = NamedTempFile::new().unwrap();
-    let mut file = named_temp_file.as_file();
-    let path = named_temp_file.path();
+    let named_temp_file: NamedTempFile = NamedTempFile::new().unwrap();
+    let mut file: &File = named_temp_file.as_file();
+    let path: &Path = named_temp_file.path();
 
     // add a shebang to the file to execute, then write all the code contents
     // to a temporary file
@@ -52,18 +55,18 @@ fn execute_code(interpreter: String, code: Vec<String>) -> Vec<String> {
     }
 
     // make the file executable
-    let mut perms = file.metadata().unwrap().permissions();
+    let mut perms: Permissions = file.metadata().unwrap().permissions();
     perms.set_mode(0o755);
     file.set_permissions(perms).unwrap();
 
     // run the file and capture the standard output
-    let mut output = Vec::new();
-    let code_std_out = std::process::Command::new(path)
+    let mut output: Vec<String> = Vec::new();
+    let code_std_out: Output = std::process::Command::new(path)
         .output()
         .expect("failed to execute process");
 
     // convert the standard output to a string and split it by newlines
-    let code_output = String::from_utf8_lossy(&code_std_out.stdout);
+    let code_output: Cow<'_, str> = String::from_utf8_lossy(&code_std_out.stdout);
     for line in code_output.split("\n") {
         output.push(line.to_string());
     }

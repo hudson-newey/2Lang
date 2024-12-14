@@ -1,7 +1,7 @@
 use crate::tokens::tokens;
 
 pub fn remove_comments(file_contents: Vec<String>) -> Vec<String> {
-    let mut new_file_contents = file_contents;
+    let mut new_file_contents: Vec<String> = file_contents;
 
     new_file_contents = remove_single_line_comments(new_file_contents);
     new_file_contents = remove_block_comments(new_file_contents);
@@ -22,9 +22,9 @@ fn remove_single_line_comments(file_contents: Vec<String>) -> Vec<String> {
 }
 
 fn remove_block_comments(file_contents: Vec<String>) -> Vec<String> {
-    let mut new_file_contents = Vec::new();
+    let mut new_file_contents: Vec<String> = Vec::new();
 
-    let mut is_inside_block_comment = false;
+    let mut is_inside_block_comment: bool = false;
     for line in file_contents {
         if line.starts_with(tokens::BLOCK_COMMENT_START) {
             is_inside_block_comment = true;
