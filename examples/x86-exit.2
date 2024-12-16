@@ -8,6 +8,7 @@
 @lib/memory/padding.2
 @lib/elf/program.2
 @lib/asm/nasm.2
+@lib/types/int8.2
 
 (ELF::ELF)
 (ELF::32_BIT_CLASS_HEADER)
@@ -103,8 +104,16 @@
 
 // PROGRAM ENTRY POINT
 
-(NASM::MOV) (NASM::EAX) 0000 0001 0000 0000 0000 0000 0000 0000
-(NASM::MOV) (NASM::EBX) 0000 0000 0000 0000 0000 0000 0000 0000
-//                      ^ The exit status code
+(NASM::MOV)
+(NASM::EAX)
+00000001 0000 0000 0000 0000 0000 0000
+
+(NASM::MOV)
+(NASM::EBX)
+(int8::1)
+// ^ The exit status code
+// we should see an exit code of 1 when we run this program
+
+0000 0000 0000 0000 0000 0000
 
 (NASM::SYSCALL)
