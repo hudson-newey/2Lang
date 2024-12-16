@@ -1,6 +1,7 @@
 use crate::tokens::tokens;
 use std::borrow::Cow;
-use std::process::{exit, Command, Output};
+use std::io::Write;
+use std::process::{exit, Child, Command, Output, Stdio};
 
 pub fn run_code_execution(contents: Vec<String>, debug: bool) -> Vec<String> {
     return interpreter_code_execution(contents.clone(), debug);
@@ -51,15 +52,27 @@ fn execute_code(interpreter: String, code: Vec<String>, debug: bool) -> Vec<Stri
 
     // run the file and capture the standard output
     let mut output: Vec<String> = Vec::new();
-    let code_std_out: Output =
-        Command::new(&interpreter)
-        .arg(heredoc_code)
-        .output()
+    let mut execution_child: Child = Command::new(&interpreter)
+        .arg("-")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
         .expect("failed to execute process");
+
+    if let Some(mut stdin) = execution_child.stdin.take() {
+        stdin
+            .write_all(heredoc_code.as_bytes())
+            .expect("Failed to write to stdin");
+    }
+
+    let code_std_out: Output = execution_child
+        .wait_with_output()
+        .expect("Failed to capture output");
 
     // convert the standard output to a string and split it by newlines
     let code_output: Cow<'_, str> = String::from_utf8_lossy(&code_std_out.stdout);
-    let errors: Cow<'_, str>  = String::from_utf8_lossy(&code_std_out.stderr);
+    let errors: Cow<'_, str> = String::from_utf8_lossy(&code_std_out.stderr);
 
     if !errors.is_empty() {
         println!("Failed to run pre-processor interpreted macro:\n{}", errors);
@@ -71,7 +84,11 @@ fn execute_code(interpreter: String, code: Vec<String>, debug: bool) -> Vec<Stri
     }
 
     if debug {
-        println!("Interpreter '{}' output: '{}'", interpreter.to_string(), code_output);
+        println!(
+            "Interpreter '{}' output: '{}'",
+            interpreter.to_string(),
+            code_output
+        );
     }
 
     return output;
