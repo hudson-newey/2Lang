@@ -19,7 +19,7 @@
 (ELF::VERSION_HEADER)
 (ELF::ABI::SYSTEM_V)
 
-(PADDING::32_ZERO_BITS)
+(PADDING::64_ZERO_BITS)
 
 (ELF::TYPE_EXEC)
 (ELF::MACHINE_X86)
@@ -43,8 +43,8 @@
 // therefore, we set the pointer to the section headers to zero
 //? (ELF::SHOFF) (PADDING::16_ZERO_BITS)
 //? (ELF::FLAGS) (PADDING::16_ZERO_BITS)
-(PADDING::16_ZERO_BITS)
-(PADDING::16_ZERO_BITS)
+(PADDING::32_ZERO_BITS)
+(PADDING::32_ZERO_BITS)
 
 // TODO: fix this
 //? (ELF::EHSIZE) 0011 0100
@@ -81,7 +81,7 @@
 
 // physical address of the segment
 //? (ELF::PROGRAM::PADDR) 0000 0000 0000 0000 0000
-(PADDING::16_ZERO_BITS)
+(PADDING::32_ZERO_BITS)
 
 //! warning: this file allocates 0100 1100 0000 0000 0000 bytes of memory
 //! this is probably more than you need, but I have done this so that you can

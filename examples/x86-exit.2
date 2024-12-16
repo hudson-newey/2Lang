@@ -1,119 +1,17 @@
-// this is a basic 32 bit program that exits with a status of 0
-//
-// If you want to learn more about this program, check out this YouTube video
-// by David Smith
-// https://www.youtube.com/watch?v=XH6jDiKxod8&list=PLZCIHSjpQ12woLj0sjsnqDH8yVuXwTy3p
+/*
+    This is an example of a simple program that exits with a status code of 0.
+    it uses a template, assembly macros, comments and binary to demonstrate
+    how to use 2Lang.
+*/
 
-@lib/elf/elf.2
-@lib/memory/padding.2
-@lib/elf/program.2
-@lib/asm/nasm.2
+@lib/templates/elf/x86.template.2
 @lib/types/int8.2
 
-(ELF::ELF)
-(ELF::32_BIT_CLASS_HEADER)
-(ELF::DATA_LSB_HEADER)
-(ELF::VERSION_HEADER)
-(ELF::ABI::SYSTEM_V)
-
-(PADDING::32_ZERO_BITS)
-
-(ELF::TYPE_EXEC)
-(ELF::MACHINE_X86)
-
-(ELF::VERSION_HEADER)
-00000000 00000000 00000000
-
-// pointer to the programs entry point
-// TODO: figure out how to calculate this using macros
-01010100
-10000000
-00000100
-00001000
-
-// pointer to where the program headers begin
-//? (ELF::PHOFF) 0011 0100 0000 0000 0000
-0011 0100
-00000000 00000000 00000000
-
-// we do not have any section headers
-// therefore, we set the pointer to the section headers to zero
-//? (ELF::SHOFF) (PADDING::16_ZERO_BITS)
-//? (ELF::FLAGS) (PADDING::16_ZERO_BITS)
-(PADDING::16_ZERO_BITS)
-(PADDING::16_ZERO_BITS)
-
-// TODO: fix this
-//? (ELF::EHSIZE) 0011 0100
-0011 0100
-0000 0000
-
-//? (ELF::PHENTSIZE) 0010 0000
-0010 0000 0000 0000
-
-//? (ELF::PHNUM) 0001 0000
-0000 0001 0000 0000
-
-//? (ELF::SHENTSIZE) 0010 1000
-0010 1000 0000 0000
-
-//? (ELF::SHNUM) 0000 0000
-0000 0000 0000 0000
-
-//? (ELF::SHSTRNDX) 0000 0000
-0000 0000 0000 0000
-
-// PROGRAM HEADERS
-
-(ELF::PROGRAM::TYPE::LOAD)
-
-// file offset where the segment begins
-//? (ELF::PROGRAM::OFFSET) 0101 0100 0000 0000 0000
-01010100
-00000000 00000000 00000000
-
-// virtual address of the segment in memory
-//? (ELF::PROGRAM::VADDR) 0101 0100 1000 0000 0000
-0101 0100 1000 0000 0000 0100 0000 1000
-
-// physical address of the segment
-//? (ELF::PROGRAM::PADDR) 0000 0000 0000 0000 0000
-(PADDING::16_ZERO_BITS)
-
-// size in bytes of the segment in the file
-//? (ELF::PROGRAM::FILESZ) 0000 1100 0000 0000 0000
-0000 1100
-00000000 00000000 00000000
-
-// size in bytes of the segment in memory
-//? (ELF::PROGRAM::MEMSZ) 0000 1100 0000 0000 0000
-0000 1100
-00000000 00000000 00000000
-
-// segment-dependent flags
-//? (ELF::PROGRAM::FLAGS) 0000 0101 0000 0000 0000
-0000 0101
-00000000 00000000 00000000
-
-// min mem alignment in bytes
-//? (ELF::PROGRAM::ALIGN) 0000 0000 0001 0000 0000
-0000 0000
-0001 0000
-0000 0000
-0000 0000
-
-// PROGRAM ENTRY POINT
-
-(NASM::MOV)
-(NASM::EAX)
-00000001 0000 0000 0000 0000 0000 0000
-
-(NASM::MOV)
-(NASM::EBX)
-(int8::1)
-// ^ The exit status code
-// we should see an exit code of 1 when we run this program
-
-0000 0000 0000 0000 0000 0000
+(NASM::MOV) (NASM::EAX) 00000001  0000 0000 0000 0000 0000 0000
+(NASM::MOV) (NASM::EBX) (int8::1) 0000 0000 0000 0000 0000 0000
+//                      ^^^^^^^^^
+//                      program exit code
+//                      we should see an exit code of 1 when we run this program
+//                      because we have set the exit code to (int8::1)
 
 (NASM::SYSCALL)

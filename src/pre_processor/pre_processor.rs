@@ -10,13 +10,18 @@ use code_execution::code_execution::{
 };
 use errors::files::file_error;
 use imports::imports::{has_imports, interpolate_imports, remove_imports};
-use macros::user::{interpolate_macros, remove_macros};
-use minification::comments::remove_comments;
+use macros::user::{interpolate_macros, remove_macro_definitions};
+use minification::{comments::remove_comments, minification::minify_linked_file};
 use minification::whitespace::remove_whitespace;
 use std::path::Path;
 use util::util::{read_file, write_to_file};
 
-pub fn pre_process(file_path: String, output_file_path: &String, preserve_linked: &bool, debug: bool) -> String {
+pub fn pre_process(
+    file_path: String,
+    output_file_path: &String,
+    preserve_linked: &bool,
+    debug: bool,
+) -> String {
     // check if the input file exists
     if !Path::new(&file_path).exists() {
         file_error(file_path.clone());
@@ -40,7 +45,9 @@ pub fn pre_process(file_path: String, output_file_path: &String, preserve_linked
         import_interpolated = remove_comments(intermediate_import_interpolate.clone());
     }
 
-    let mut code_execute_interpolated: Vec<String> = import_interpolated.clone();
+    let minified_linked_source: Vec<String> = minify_linked_file(import_interpolated);
+
+    let mut code_execute_interpolated: Vec<String> = minified_linked_source.clone();
     while has_code_execution_statements(code_execute_interpolated.clone()) {
         code_execute_interpolated = run_code_execution(code_execute_interpolated.clone(), debug)
     }
@@ -64,7 +71,7 @@ pub fn pre_process(file_path: String, output_file_path: &String, preserve_linked
     // and we can start removing parts of the file that are not ones or zeros
     // therefore reducing the size that the compiler needs to process
     let no_imports_file: Vec<String> = remove_imports(macro_complete.clone());
-    let result: Vec<String> = remove_macros(no_imports_file.clone());
+    let result: Vec<String> = remove_macro_definitions(no_imports_file.clone());
     let minified_result: Vec<String> = remove_whitespace(result.clone());
 
     let new_file_path: String = format!("{}.2.bin", output_file_path);

@@ -1,6 +1,6 @@
 use crate::tokens::tokens;
 
-pub fn remove_macros(file_contents: Vec<String>) -> Vec<String> {
+pub fn remove_macro_definitions(file_contents: Vec<String>) -> Vec<String> {
     let mut new_file_contents: Vec<String> = Vec::new();
 
     for line in file_contents {
@@ -84,28 +84,26 @@ pub fn interpolate_macros(target: &Vec<String>) -> Vec<String> {
     let macros: Vec<String> = get_macros(target.clone());
 
     for line in target {
-        let mut line_replaced: bool = false;
+        let mut modified_line: String = line.clone();
+
         for searching_macro in &macros {
             let searching_macro_key: String = get_macro_key(searching_macro.clone());
 
-            if line.contains(&*searching_macro_key) && !line.starts_with(tokens::MACRO) {
+            if modified_line.contains(&*searching_macro_key) && !modified_line.starts_with(tokens::MACRO) {
                 let macro_value: String = get_macro_value(searching_macro.clone());
 
                 let interpolated_macro_value: String =
-                    replace_macro_parameter(macro_value, line.clone());
+                    replace_macro_parameter(macro_value, modified_line.clone());
 
                 // replace the macro key in the string with the macro value
                 let new_line: String =
-                    line.replace(&*searching_macro_key, &interpolated_macro_value);
+                    modified_line.replace(&*searching_macro_key, &interpolated_macro_value);
 
-                new_file_lines.push(new_line);
-                line_replaced = true;
+                modified_line = new_line.clone();
             }
         }
 
-        if !line_replaced {
-            new_file_lines.push(line.clone());
-        }
+        new_file_lines.push(modified_line.clone());
     }
 
     return new_file_lines.clone();
