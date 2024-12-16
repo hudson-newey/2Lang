@@ -1,11 +1,6 @@
 use crate::tokens::tokens;
 use std::borrow::Cow;
-use std::fs::{File, Permissions};
-use std::io::Write;
-use std::os::unix::fs::PermissionsExt;
-use std::path::Path;
-use std::process::Output;
-use tempfile::NamedTempFile;
+use std::process::{exit, Command, Output};
 
 pub fn run_code_execution(contents: Vec<String>, debug: bool) -> Vec<String> {
     return interpreter_code_execution(contents.clone(), debug);
@@ -42,33 +37,41 @@ pub fn remove_interpreter_code_blocks(contents: Vec<String>) -> Vec<String> {
     return result;
 }
 
-fn execute_code(interpreter: String, code: Vec<String>) -> Vec<String> {
-    let named_temp_file: NamedTempFile = NamedTempFile::new().unwrap();
-    let mut file: &File = named_temp_file.as_file();
-    let path: &Path = named_temp_file.path();
+fn execute_code(interpreter: String, code: Vec<String>, debug: bool) -> Vec<String> {
+    let stringified_code: String = code.join("\n");
 
-    // add a shebang to the file to execute, then write all the code contents
-    // to a temporary file
-    writeln!(file, "#!{}", interpreter).unwrap();
-    for line in code {
-        writeln!(file, "{}", line).unwrap();
+    if debug {
+        println!("'{}': '{}'", interpreter.to_string(), stringified_code);
     }
 
-    // make the file executable
-    let mut perms: Permissions = file.metadata().unwrap().permissions();
-    perms.set_mode(0o755);
-    file.set_permissions(perms).unwrap();
+    // we use a heredoc to execute the command through an interpreter
+    // this means that the interpreter that you are using must support running
+    // programs from STDIN
+    let heredoc_code: String = format!(r#"{}"#, stringified_code);
 
     // run the file and capture the standard output
     let mut output: Vec<String> = Vec::new();
-    let code_std_out: Output = std::process::Command::new(path)
+    let code_std_out: Output =
+        Command::new(&interpreter)
+        .arg(heredoc_code)
         .output()
         .expect("failed to execute process");
 
     // convert the standard output to a string and split it by newlines
     let code_output: Cow<'_, str> = String::from_utf8_lossy(&code_std_out.stdout);
+    let errors: Cow<'_, str>  = String::from_utf8_lossy(&code_std_out.stderr);
+
+    if !errors.is_empty() {
+        println!("Failed to run pre-processor interpreted macro:\n{}", errors);
+        exit(1);
+    }
+
     for line in code_output.split("\n") {
         output.push(line.to_string());
+    }
+
+    if debug {
+        println!("Interpreter '{}' output: '{}'", interpreter.to_string(), code_output);
     }
 
     return output;
@@ -87,24 +90,27 @@ fn interpreter_code_execution(contents: Vec<String>, debug: bool) -> Vec<String>
             code_interpreter = line
                 .replace(tokens::PRE_PROCESSOR_DIRECTIVE_INTERPRETER, "")
                 .replace(tokens::PRE_PROCESSOR_DIRECTIVE_END, "")
+                .replace("{", "")
                 .trim()
                 .to_string();
         }
 
-        if !in_code_execution_block {
-            result.push(line.clone());
+        if in_code_execution_block {
+            let stripped_line = line
+                .replace(&code_interpreter, "")
+                .replace("{", "")
+                .replace(tokens::PRE_PROCESSOR_DIRECTIVE_INTERPRETER, "")
+                .replace(tokens::PRE_PROCESSOR_DIRECTIVE_END, "");
+
+            code_buffer.push(stripped_line.clone());
         } else {
-            code_buffer.push(line.clone());
+            result.push(line.clone());
         }
 
         if line.contains(tokens::PRE_PROCESSOR_DIRECTIVE_END) {
             in_code_execution_block = false;
 
-            if debug {
-                println!("'{}': '{}'", code_interpreter.to_string(), line);
-            }
-
-            let execution_output = execute_code(code_interpreter.to_string(), code_buffer);
+            let execution_output = execute_code(code_interpreter.to_string(), code_buffer, debug);
             for output_line in execution_output {
                 result.push(output_line);
             }
