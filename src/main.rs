@@ -22,11 +22,14 @@ fn build(args: &Vec<String>) {
         println!("file name: {}\n", file_name);
     }
 
-    let input_file_name: String = if program::cla::generate_intermediate(args.clone()) {
+    let output_file_path: String = program::cla::output_file_path(args.clone());
+
+    let preprocessed_file_path: String = if program::cla::generate_intermediate(args.clone()) {
         let should_preserve_linked: bool = program::cla::preserve_linked(args.clone());
 
         pre_processor::pre_processor::pre_process(
             file_name.to_string(),
+            &output_file_path,
             &should_preserve_linked,
             print_debug,
         )
@@ -35,20 +38,19 @@ fn build(args: &Vec<String>) {
     };
 
     if print_debug {
-        println!("File in: {}\n", input_file_name);
+        println!("Linked file in: {}\n", preprocessed_file_path);
     }
 
-    let compiled_file_path: Vec<u8> = compiler::read_file::read_file(input_file_name.clone());
-    let output_file_path: String = program::cla::output_file_path(args.clone());
+    let compiled_file_path: Vec<u8> = compiler::read_file::read_file(preprocessed_file_path.clone());
 
     if print_debug {
-        println!("output file out: {}\n", output_file_path);
+        println!("Assembled file out: {}\n", output_file_path);
     }
 
     compiler::write_binary::write_binary(compiled_file_path, output_file_path.clone());
 
     if !program::cla::preserve_intermediate(args.clone()) {
-        compiler::write_binary::delete_file(input_file_name.clone());
+        compiler::write_binary::delete_file(preprocessed_file_path.clone());
     }
 
     if program::cla::output_to_stdout(args.clone()) {

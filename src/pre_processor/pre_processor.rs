@@ -16,7 +16,7 @@ use minification::whitespace::remove_whitespace;
 use std::path::Path;
 use util::util::{read_file, write_to_file};
 
-pub fn pre_process(file_path: String, preserve_linked: &bool, debug: bool) -> String {
+pub fn pre_process(file_path: String, output_file_path: &String, preserve_linked: &bool, debug: bool) -> String {
     // check if the input file exists
     if !Path::new(&file_path).exists() {
         file_error(file_path.clone());
@@ -48,7 +48,7 @@ pub fn pre_process(file_path: String, preserve_linked: &bool, debug: bool) -> St
     code_execute_interpolated = remove_interpreter_code_blocks(code_execute_interpolated);
 
     if *preserve_linked {
-        let preserved_linked_file_path: String = format!("{}.linked", file_path);
+        let preserved_linked_file_path: String = format!("{}.2.o", output_file_path);
         write_to_file(
             preserved_linked_file_path,
             code_execute_interpolated.clone(),
@@ -67,7 +67,7 @@ pub fn pre_process(file_path: String, preserve_linked: &bool, debug: bool) -> St
     let result: Vec<String> = remove_macros(no_imports_file.clone());
     let minified_result: Vec<String> = remove_whitespace(result.clone());
 
-    let new_file_path: String = format!("{}.bin", file_path);
+    let new_file_path: String = format!("{}.2.bin", output_file_path);
     write_to_file(new_file_path.clone(), minified_result.clone());
 
     return new_file_path;

@@ -15,7 +15,8 @@
             {
                 "id": "2lang",
                 "extensions": [
-                    ".2"
+                    ".2",
+                    ".2.o"
                 ],
                 "icon": {
                     "light": "./icons/2lang.svg",
