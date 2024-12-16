@@ -12,7 +12,14 @@
     "extensions": {
         "recommendations": [
             "editorconfig.editorconfig",
-            "streetsidesoftware.code-spell-checker"
+            "streetsidesoftware.code-spell-checker",
+
+            "dustypomerleau.rust-syntax",
+            "fill-labs.dependi",
+            "rust-lang.rust-analyzer",
+            "swellaby.vscode-rust-test-adapter",
+
+            "mads-hartmann.bash-ide-vscode"
         ]
     }
 }
