@@ -19,11 +19,11 @@ mod tests {
             // file should have thrown an error at compile time
             // and we should not expect there to be an output file
             let expected_output_path: String = format!("{}/{}.out", output_directory, file_name);
-            let realized_output_path: String = format!("tmp/{}.test.out", file_name);
+            let realized_output_path: String = format!("build/{}.test.out", file_name);
             let output_exists = std::path::Path::new(&expected_output_path).exists();
 
             let output = std::process::Command::new("cargo")
-                .arg("run")
+                .arg("run build")
                 .arg(file_path)
                 .arg("-o")
                 .arg(realized_output_path.clone())

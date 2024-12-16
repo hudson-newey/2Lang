@@ -1,7 +1,5 @@
 # 2 lang build assets
 build/
-*.bin
-*.out
 
 dev/
 
