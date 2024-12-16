@@ -11,15 +11,22 @@
     },
     "extensions": {
         "recommendations": [
+            // standardization
             "editorconfig.editorconfig",
             "streetsidesoftware.code-spell-checker",
 
+            // working with the CLI
             "dustypomerleau.rust-syntax",
             "fill-labs.dependi",
             "rust-lang.rust-analyzer",
             "swellaby.vscode-rust-test-adapter",
 
-            "mads-hartmann.bash-ide-vscode"
+            // working with low level assembler output / binary files
+            "qiaojie.binary-viewer",
+            "valentin.beamdasm",
+
+            // bash support
+            "valentin.beamdasm",
         ]
     }
 }

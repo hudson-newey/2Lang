@@ -1,0 +1,31 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "2lang-intermediate",
+    "patterns": [
+        { "include": "#binary" },
+        { "include": "#errors" }
+    ],
+    "repository": {
+        "binary": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.<%-languageId>",
+                    "match": "0"
+                },
+                {
+                    "name": "variable.language.<%-languageId>",
+                    "match": "1"
+                }
+            ]
+        },
+        "errors": {
+            "patterns": [
+                {
+                    "name": "invalid.illegal.<%-languageId>",
+                    "match": "."
+                }
+            ]
+        }
+    },
+    "scopeName": "source.2.bin"
+}

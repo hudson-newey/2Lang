@@ -14,10 +14,6 @@
         "languages": [
             {
                 "id": "2lang",
-                "aliases": [
-                    "2Lang",
-                    "2lang"
-                ],
                 "extensions": [
                     ".2"
                 ],
@@ -26,6 +22,12 @@
                     "dark": "./icons/2lang.svg"
                 },
                 "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "2lang-intermediate",
+                "extensions": [
+                    ".2.bin"
+                ]
             }
         ],
         "grammars": [
@@ -33,6 +35,11 @@
                 "language": "2lang",
                 "scopeName": "source.2",
                 "path": "./syntaxes/2lang.tmLanguage.json"
+            },
+            {
+                "language": "2lang-intermediate",
+                "scopeName": "source.2.bin",
+                "path": "./syntaxes/2lang-intermediate.tmLanguage.json"
             }
         ]
     }
