@@ -7,17 +7,18 @@
     "settings": {
         "files.insertFinalNewline": true,
         "editor.rulers": [80, 120],
-        "cSpell.words": ["docgen"]
+        "cSpell.words": ["docgen"],
+        "workbench.iconTheme": "material-icon-theme",
     },
     "extensions": {
         "recommendations": [
             // standardization
             "editorconfig.editorconfig",
             "streetsidesoftware.code-spell-checker",
+            "pkief.material-icon-theme",
 
             // working with the CLI
             "dustypomerleau.rust-syntax",
-            "fill-labs.dependi",
             "rust-lang.rust-analyzer",
             "swellaby.vscode-rust-test-adapter",
 

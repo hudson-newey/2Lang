@@ -9,7 +9,6 @@ mod program;
 mod tokens;
 
 fn build(args: &Vec<String>) {
-    let print_debug: bool = program::cla::log_debug(args.clone());
     let file_name: &String = if args.len() > 2 {
         &args[2]
     } else {
@@ -17,6 +16,7 @@ fn build(args: &Vec<String>) {
         exit(1)
     };
 
+    let print_debug: bool = program::cla::log_debug(args.clone());
     if print_debug {
         println!("\nargs: {:?}", args);
         println!("file name: {}\n", file_name);
@@ -69,7 +69,7 @@ fn build(args: &Vec<String>) {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() < 1 {
+    if args.len() <= 1 {
         println!("Usage: {} <command> [options]", args[0]);
         exit(1);
     }
