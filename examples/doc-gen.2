@@ -1,0 +1,14 @@
+@lib/vars/comp.2
+
+/**
+ * @description
+ * A simple pre-processor code execution macro that double a number
+ * that is available in pre-processing
+ */
+#(MATH::SQRT) @!/usr/bin/env python{
+    import math
+    print(math.sqrt($))
+}
+
+(CONST) input 2
+(CONST) output { (MATH::SQRT) 2 }

@@ -7,7 +7,24 @@
     "settings": {
         "files.insertFinalNewline": true,
         "editor.rulers": [80, 120],
-        "cSpell.words": ["docgen"],
+        "cSpell.words": [
+            "docgen",
+
+            // ELF header names
+            "EHDR",
+            "PHOFF",
+            "SHOFF",
+            "EHSIZE",
+            "PHENTSIZE",
+            "SHENTSIZE",
+            "PHNUM",
+            "SHNUM",
+            "SHSTRNDX",
+
+            // NASM
+            "NASM",
+            "SYSCALL",
+        ],
         "workbench.iconTheme": "material-icon-theme",
     },
     "extensions": {

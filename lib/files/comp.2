@@ -1,0 +1,35 @@
+/**
+ * @description
+ * Updates the modified time of a path.
+ * This macro will create the path if it does not exist.
+ *
+ * @targets compiler
+ */
+#[COMP::FILES::TOUCH] @!/bin/sh{
+    touch $
+}
+
+/**
+ * @description
+ * Unlinks (removes) a file path
+ *
+ * @targets compiler
+ */
+#[COMP::FILES::UNLINK] @!/bin/sh{
+    rm -rf $
+}
+
+/**
+ * @description
+ * Conditionally adds a code block to the pre-processor output if a file exists
+ *
+ * @example
+ * [COMP::FILES::EXISTS] ./windows-config.yml (MY::CONFIG::CONFIGURE_WINDOWS_DIST)
+ *
+ * @targets compiler
+ */
+#[COMP::FILES::EXISTS] @!/bin/sh{
+    if [[ -d $ ]]; then
+        echo $
+    fi
+}

@@ -104,3 +104,27 @@ starting asterisk's.
  */
 #(MY::MACRO) (STD::PRINT) "Hello, $!"
 ```
+
+### @target
+
+Possible values: `compiler` or `runtime`
+
+This is useful for documenting if a macro will modify the runtime behavior of a
+program.
+
+A macro is typically defined as "modifying the runtime behavior of a program" if
+it writes to the output/assembled file.
+
+Additionally, while it is a convention (not a requirement), runtime macros are
+typically scoped with round brackets "()", while compile time macros are
+typically scoped with square brackets "[]".
+
+```ts
+/**
+ * @description
+ * Deletes a file at compile time
+ *
+ * @targets compiler
+ */
+#[MY::REMOVE_FILE] @!/bin/sh{ rm $ }
+```

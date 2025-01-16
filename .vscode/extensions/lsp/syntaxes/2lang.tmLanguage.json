@@ -6,6 +6,7 @@
         { "include": "#comments" },
         { "include": "#imports" },
         { "include": "#code-execution" },
+        { "include": "#code-execution-code" },
         { "include": "#macros" },
         { "include": "#arguments" }
     ],
@@ -34,15 +35,47 @@
                     "patterns": [
                         {
                             "name": "storage.type.class.<%-languageId%>",
-                            "match": "@return"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
                             "match": "@description"
                         },
                         {
                             "name": "storage.type.class.<%-languageId%>",
                             "match": "@param"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@return"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@example"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@see"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@since"
+                        },
+                        {
+                            "name": "invalid.deprecated.<%-languageId>",
+                            "match": "@deprecated"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@author"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@version"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@license"
+                        },
+                        {
+                            "name": "storage.type.class.<%-languageId%>",
+                            "match": "@targets"
                         }
                     ]
                 }
@@ -52,15 +85,23 @@
             "patterns": [
                 {
                     "name": "keyword.control.import.<%-languageId>",
-                    "match": "(?!@!)(@.+){"
+                    "match": "(?!@!)(@.+)\\.2"
                 }
             ]
         },
         "code-execution": {
             "patterns": [
                 {
-                    "name": "keyword.control.new.<%-languageId%>",
+                    "name": "meta.preprocessor.<%-languageId>",
                     "match": "(@!.+){"
+                }
+            ]
+        },
+        "code-execution-code": {
+            "patterns": [
+                {
+                    "name": "invalid.illegal",
+                    "match": "{[.|\\s]+}"
                 }
             ]
         },
