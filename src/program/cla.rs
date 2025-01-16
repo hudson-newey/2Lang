@@ -7,7 +7,9 @@ pub fn preserve_intermediate(cla: Vec<String>) -> bool {
 
 pub fn preserve_linked(cla: Vec<String>) -> bool {
     const PRESERVE_LINKED: &str = "--preserve-linked";
-    return cla.contains(&PRESERVE_LINKED.to_string());
+    const PRESERVE_LINKED_SHORT: &str = "-pl";
+    return cla.contains(&PRESERVE_LINKED.to_string())
+        || cla.contains(&PRESERVE_LINKED_SHORT.to_string());
 }
 
 pub fn generate_intermediate(cla: Vec<String>) -> bool {
@@ -15,6 +17,13 @@ pub fn generate_intermediate(cla: Vec<String>) -> bool {
     const GENERATE_INTERMEDIATE_SHORT: &str = "-b";
     return !(cla.contains(&GENERATE_INTERMEDIATE.to_string())
         || cla.contains(&GENERATE_INTERMEDIATE_SHORT.to_string()));
+}
+
+pub fn processor_comments(cla: Vec<String>) -> bool {
+    const PROCESSOR_COMMENTS: &str = "--processor-comments";
+    const PROCESSOR_COMMENTS_SHORT: &str = "-pc";
+    return cla.contains(&PROCESSOR_COMMENTS.to_string()) ||
+        cla.contains(&PROCESSOR_COMMENTS_SHORT.to_string());
 }
 
 pub fn log_debug(cla: Vec<String>) -> bool {

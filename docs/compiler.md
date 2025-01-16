@@ -19,7 +19,8 @@
 ## Pre-Processor Options
 
 - `-p`, `--preserve-intermediate` preserve the output produced by the pre-processor (with macros expanded)
-- `--preserve-linked` Preserves the statically linked file (without macros expanded)
+- `-pc`, `--processor-comments` Adds pre-processor comments to the intermediate output
+- `-pl`, `--preserve-linked` Preserves the statically linked file (without macros expanded)
 
 ## Optimizer Options
 

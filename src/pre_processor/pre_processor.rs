@@ -20,6 +20,7 @@ pub fn pre_process(
     file_path: String,
     output_file_path: &String,
     preserve_linked: &bool,
+    _processor_comments: &bool,
     debug: bool,
 ) -> String {
     // check if the input file exists

@@ -26,11 +26,13 @@ fn build(args: &Vec<String>) {
 
     let preprocessed_file_path: String = if program::cla::generate_intermediate(args.clone()) {
         let should_preserve_linked: bool = program::cla::preserve_linked(args.clone());
+        let with_processor_comments: bool = program::cla::processor_comments(args.clone());
 
         pre_processor::pre_processor::pre_process(
             file_name.to_string(),
             &output_file_path,
             &should_preserve_linked,
+            &with_processor_comments,
             print_debug,
         )
     } else {
