@@ -1,0 +1,16 @@
+// commands
+#([x86]NASM::MOV) 1011
+
+/** system interrupt */
+#([x86]NASM::INT) 11001101
+
+// INT 80
+#([x86]NASM::SYSCALL) (NASM::INT) 10000000
+
+// registers
+
+/** syscall NR */
+#([x86]NASM::EAX) 1000
+
+#([x86]NASM::EBX) 1011
+#([x86]NASM::ECX) 1100

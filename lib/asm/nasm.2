@@ -1,14 +1,9 @@
-// x86-64 16 bit nasm commands
+/**
+    Imports all nasm macros
+    Warning: you probably do not want to use this without a namespace macro
+*/
 
-
-// commands
-#(NASM::MOV) 1011
-
-#(NASM::INT) 11001101
-
-// INT 80
-#(NASM::SYSCALL) (NASM::INT) 10000000
-
-// registers
-#(NASM::EAX) 1000
-#(NASM::EBX) 1011
+@lib/asm/nasm/x86_64.2
+@lib/asm/nasm/arm.2
+@lib/asm/nasm/arm64.2
+@lib/asm/nasm/x86.2

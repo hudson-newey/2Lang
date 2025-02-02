@@ -1,0 +1,27 @@
+@lib/asm/nasm.2
+@lib/io/streams.2
+@lib/vars/comp.2
+@lib/types/int4.2
+
+/**
+ * @description
+ * The syscall instruction code to write to a stream
+ */
+#(IO::SYS_WRITE) (int4::4)
+
+/**
+ * @description
+ * Prints a message to stdout
+ *
+ * @param message
+ * @param message length
+ */
+#(IO::PRINT_STDOUT) {
+    [CONST] message $
+    [CONST] messageLen $
+
+    (NASM::MOV) (NASM::EAX) (IO::SYS_WRITE)
+    (NASM::MOV) (NASM::EBX) [VAR::message]
+    (NASM::MOV) (NASM::ECX) [VAR::message_len]
+    (NASM::SYSCALL)
+}
