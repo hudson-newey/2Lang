@@ -6,12 +6,13 @@
 
 @lib/templates/elf/x86.template.2
 @lib/types/int8.2
+@lib/asm/nasm/x86.2
 
-(NASM::MOV) (NASM::EAX) 00000001  0000 0000 0000 0000 0000 0000
-(NASM::MOV) (NASM::EBX) (int8::1) 0000 0000 0000 0000 0000 0000
+([x86]NASM::MOV) ([x86]NASM::EAX) 00000001  0000 0000 0000 0000 0000 0000
+([x86]NASM::MOV) ([x86]NASM::EBX) (int8::1) 0000 0000 0000 0000 0000 0000
 //                      ^^^^^^^^^
 //                      program exit code
 //                      we should see an exit code of 1 when we run this program
 //                      because we have set the exit code to (int8::1)
 
-(NASM::SYSCALL)
+([x86]NASM::SYSCALL)

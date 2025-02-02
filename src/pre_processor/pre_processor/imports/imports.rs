@@ -2,6 +2,7 @@ use crate::pre_processor::pre_processor::{errors, util};
 use crate::tokens::tokens;
 
 pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<String> {
+    let mut throw_errors: bool = false;
     let mut new_file_lines: Vec<String> = Vec::new();
 
     let mut line_number: usize = 0;
@@ -32,20 +33,28 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
                     line_number,
                     imported_file_path.clone(),
                 );
+
+                throw_errors = true;
+            } else {
+                let imported_file_lines: Vec<String> = util::util::read_file(imported_file_path);
+
+                for imported_line in imported_file_lines {
+                    new_file_lines.push(imported_line);
+                }
+
+                new_file_lines.push("\n".to_string());
+
+                evaluated_imports.push(line);
             }
-
-            let imported_file_lines: Vec<String> = util::util::read_file(imported_file_path);
-
-            for imported_line in imported_file_lines {
-                new_file_lines.push(imported_line);
-            }
-
-            new_file_lines.push("\n".to_string());
-
-            evaluated_imports.push(line);
         } else {
             new_file_lines.push(line);
         }
+    }
+
+    // TODO: we should probably return a Result<T> type here so that once macro
+    // errors are added, we can have multiple error types emitted
+    if throw_errors {
+        std::process::exit(1);
     }
 
     return new_file_lines;

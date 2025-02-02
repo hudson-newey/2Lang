@@ -24,6 +24,9 @@ fn build(args: &Vec<String>) {
 
     let output_file_path: String = program::cla::output_file_path(args.clone());
 
+    // test if there is a directory for the output file, if it doesn't exist
+    // we want to create a directory for it
+
     let preprocessed_file_path: String = if program::cla::generate_intermediate(args.clone()) {
         let should_preserve_linked: bool = program::cla::preserve_linked(args.clone());
         let with_processor_comments: bool = program::cla::processor_comments(args.clone());

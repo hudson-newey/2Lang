@@ -1,4 +1,28 @@
-// commands
+/** syscall NR */
+#([x86]NASM::EAX) 1000
+
+/** return register */
+#([x86]NASM::EAX) 1010
+
+/** arg0 */
+#([x86]NASM::EBX) 1011
+
+/** arg1 */
+#([x86]NASM::ECX) 1100
+
+/** arg2 */
+#([x86]NASM::EDX) 1101
+
+/** arg3 */
+#([x86]NASM::ESI) 1110
+
+/** arg4 */
+#([x86]NASM::EDI) 1111
+
+/** arg5 */
+#([x86]NASM::EDP) 1111
+
+// sys calls
 #([x86]NASM::MOV) 1011
 
 /** system interrupt */
@@ -6,11 +30,3 @@
 
 // INT 80
 #([x86]NASM::SYSCALL) (NASM::INT) 10000000
-
-// registers
-
-/** syscall NR */
-#([x86]NASM::EAX) 1000
-
-#([x86]NASM::EBX) 1011
-#([x86]NASM::ECX) 1100
