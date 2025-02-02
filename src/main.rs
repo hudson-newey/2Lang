@@ -81,9 +81,9 @@ fn main() {
 
     let command: &String = &args[1];
 
-    if command == "build" {
+    if command == "build" || command == "b" {
         build(&args);
-    } else if command == "mod" {
+    } else if command == "mod" || command == "m" {
         if args.len() < 3 {
             println!("Usage: {} mod <module> [options]", args[0]);
             exit(1);

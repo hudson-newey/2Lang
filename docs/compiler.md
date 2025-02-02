@@ -2,8 +2,8 @@
 
 ## Commands
 
-- `build` Build a 2Lang application
-- `mod docgen` Build 2Lang documentation
+- `build`, `b` Build a 2Lang application
+- `mod docgen`, `m` Build 2Lang documentation
 
 ## Command Line Options
 
