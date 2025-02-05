@@ -1,5 +1,10 @@
-use std::process::{exit, Command};
-use std::{env, fs};
+use std::env;
+use std::process::exit;
+
+use notify::*;
+use std::{path::Path, time::Duration};
+
+use program::arguments::watch_source;
 
 mod compiler;
 mod modules;
@@ -8,66 +13,40 @@ mod pre_processor;
 mod program;
 mod tokens;
 
-fn build(args: &Vec<String>) {
-    let file_name: &String = if args.len() > 2 {
-        &args[2]
+fn request_build(args: &Vec<String>) {
+    let sourced_file: &String = compiler::compiler::build_source(&args);
+
+    let should_watch: bool = watch_source(args.clone());
+    if should_watch {
+        watch_file(&sourced_file, &args);
+    }
+}
+
+fn watch_file(sourced_file: &String, args: &Vec<String>) {
+    // we should never trigger this condition, but I don't know rust well enough
+    // to know if this type of error would be caught by the compiler
+    if sourced_file.len() < 1 {
+        println!("Unable to watch: Source file count < 1");
+        return;
+    }
+
+    let main_file: String = sourced_file.clone();
+
+    // TODO: I probably want to use a debounced watcher
+    let (tx, rx) = std::sync::mpsc::channel();
+    let mut watcher: Box<dyn Watcher> = if RecommendedWatcher::kind() == WatcherKind::PollWatcher {
+        let config = Config::default().with_poll_interval(Duration::from_secs(1));
+        Box::new(PollWatcher::new(tx, config).unwrap())
     } else {
-        println!("Usage: {} build <file_name> [options]", args[0]);
-        exit(1)
+        Box::new(RecommendedWatcher::new(tx, Config::default()).unwrap())
     };
 
-    let print_debug: bool = program::arguments::log_debug(args.clone());
-    if print_debug {
-        println!("\nargs: {:?}", args);
-        println!("file name: {}\n", file_name);
-    }
+    watcher
+        .watch(Path::new(main_file.as_str()), RecursiveMode::Recursive)
+        .unwrap();
 
-    let output_file_path: String = program::arguments::output_file_path(args.clone());
-
-    // test if there is a directory for the output file, if it doesn't exist
-    // we want to create a directory for it
-
-    let preprocessed_file_path: String = if program::arguments::generate_intermediate(args.clone()) {
-        let should_preserve_linked: bool = program::arguments::preserve_linked(args.clone());
-        let with_processor_comments: bool = program::arguments::processor_comments(args.clone());
-
-        pre_processor::pre_processor::pre_process(
-            file_name.to_string(),
-            &output_file_path,
-            &should_preserve_linked,
-            &with_processor_comments,
-            print_debug,
-        )
-    } else {
-        file_name.to_string()
-    };
-
-    if print_debug {
-        println!("Linked file in: {}\n", preprocessed_file_path);
-    }
-
-    let compiled_file_path: Vec<u8> = compiler::read_file::read_file(preprocessed_file_path.clone());
-
-    if print_debug {
-        println!("Assembled file out: {}\n", output_file_path);
-    }
-
-    compiler::write_binary::write_binary(compiled_file_path, output_file_path.clone());
-
-    if !program::arguments::preserve_intermediate(args.clone()) {
-        compiler::write_binary::delete_file(preprocessed_file_path.clone());
-    }
-
-    if program::arguments::output_to_stdout(args.clone()) {
-        let contents: String = fs::read_to_string(output_file_path.clone())
-            .expect("Something went wrong reading the file");
-        println!("{}", contents);
-    }
-
-    if program::arguments::auto_run(args.clone()) {
-        Command::new(output_file_path)
-            .spawn()
-            .expect("failed to execute process");
+    for _ in rx {
+        request_build(&args);
     }
 }
 
@@ -82,7 +61,7 @@ fn main() {
     let command: &String = &args[1];
 
     if command == "build" || command == "b" {
-        build(&args);
+        request_build(&args);
     } else if command == "mod" || command == "m" {
         if args.len() < 3 {
             println!("Usage: {} mod <module> [options]", args[0]);

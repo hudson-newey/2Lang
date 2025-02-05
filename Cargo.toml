@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 colored = "3.0.0"
+notify = "8.0.0"
 tempfile = "3"

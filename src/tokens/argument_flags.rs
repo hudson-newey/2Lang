@@ -20,3 +20,5 @@ pub const OUTPUT_TO_STDOUT: &str = "--stdout";
 pub const OUTPUT_TO_STDOUT_SHORT: &str = "-s";
 
 pub const AUTO_RUN: &str = "--run";
+
+pub const WATCH: &str = "--watch";
