@@ -16,20 +16,20 @@ fn build(args: &Vec<String>) {
         exit(1)
     };
 
-    let print_debug: bool = program::cla::log_debug(args.clone());
+    let print_debug: bool = program::arguments::log_debug(args.clone());
     if print_debug {
         println!("\nargs: {:?}", args);
         println!("file name: {}\n", file_name);
     }
 
-    let output_file_path: String = program::cla::output_file_path(args.clone());
+    let output_file_path: String = program::arguments::output_file_path(args.clone());
 
     // test if there is a directory for the output file, if it doesn't exist
     // we want to create a directory for it
 
-    let preprocessed_file_path: String = if program::cla::generate_intermediate(args.clone()) {
-        let should_preserve_linked: bool = program::cla::preserve_linked(args.clone());
-        let with_processor_comments: bool = program::cla::processor_comments(args.clone());
+    let preprocessed_file_path: String = if program::arguments::generate_intermediate(args.clone()) {
+        let should_preserve_linked: bool = program::arguments::preserve_linked(args.clone());
+        let with_processor_comments: bool = program::arguments::processor_comments(args.clone());
 
         pre_processor::pre_processor::pre_process(
             file_name.to_string(),
@@ -54,17 +54,17 @@ fn build(args: &Vec<String>) {
 
     compiler::write_binary::write_binary(compiled_file_path, output_file_path.clone());
 
-    if !program::cla::preserve_intermediate(args.clone()) {
+    if !program::arguments::preserve_intermediate(args.clone()) {
         compiler::write_binary::delete_file(preprocessed_file_path.clone());
     }
 
-    if program::cla::output_to_stdout(args.clone()) {
+    if program::arguments::output_to_stdout(args.clone()) {
         let contents: String = fs::read_to_string(output_file_path.clone())
             .expect("Something went wrong reading the file");
         println!("{}", contents);
     }
 
-    if program::cla::auto_run(args.clone()) {
+    if program::arguments::auto_run(args.clone()) {
         Command::new(output_file_path)
             .spawn()
             .expect("failed to execute process");

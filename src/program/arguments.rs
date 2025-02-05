@@ -1,42 +1,36 @@
+use crate::tokens::argument_flags::{
+    AUTO_RUN, GENERATE_INTERMEDIATE, GENERATE_INTERMEDIATE_SHORT, LOG_DEBUG, LOG_DEBUG_SHORT,
+    OUTPUT_FILE_PATH, OUTPUT_FILE_PATH_SHORT, OUTPUT_TO_STDOUT, OUTPUT_TO_STDOUT_SHORT,
+    PRESERVE_INTERMEDIATE, PRESERVE_INTERMEDIATE_SHORT, PRESERVE_LINKED, PRESERVE_LINKED_SHORT,
+    PROCESSOR_COMMENTS, PROCESSOR_COMMENTS_SHORT,
+};
+
 pub fn preserve_intermediate(cla: Vec<String>) -> bool {
-    const PRESERVE_INTERMEDIATE: &str = "--preserve-intermediate";
-    const PRESERVE_INTERMEDIATE_SHORT: &str = "-p";
     return cla.contains(&PRESERVE_INTERMEDIATE.to_string())
         || cla.contains(&PRESERVE_INTERMEDIATE_SHORT.to_string());
 }
 
 pub fn preserve_linked(cla: Vec<String>) -> bool {
-    const PRESERVE_LINKED: &str = "--preserve-linked";
-    const PRESERVE_LINKED_SHORT: &str = "-pl";
     return cla.contains(&PRESERVE_LINKED.to_string())
         || cla.contains(&PRESERVE_LINKED_SHORT.to_string());
 }
 
 pub fn generate_intermediate(cla: Vec<String>) -> bool {
-    const GENERATE_INTERMEDIATE: &str = "--generate-intermediate";
-    const GENERATE_INTERMEDIATE_SHORT: &str = "-b";
     return !(cla.contains(&GENERATE_INTERMEDIATE.to_string())
         || cla.contains(&GENERATE_INTERMEDIATE_SHORT.to_string()));
 }
 
 pub fn processor_comments(cla: Vec<String>) -> bool {
-    const PROCESSOR_COMMENTS: &str = "--processor-comments";
-    const PROCESSOR_COMMENTS_SHORT: &str = "-pc";
-    return cla.contains(&PROCESSOR_COMMENTS.to_string()) ||
-        cla.contains(&PROCESSOR_COMMENTS_SHORT.to_string());
+    return cla.contains(&PROCESSOR_COMMENTS.to_string())
+        || cla.contains(&PROCESSOR_COMMENTS_SHORT.to_string());
 }
 
 pub fn log_debug(cla: Vec<String>) -> bool {
-    const LOG_DEBUG: &str = "--debug";
-    const LOG_DEBUG_SHORT: &str = "-d";
     return cla.contains(&LOG_DEBUG.to_string()) || cla.contains(&LOG_DEBUG_SHORT.to_string());
 }
 
 pub fn output_file_path(cla: Vec<String>) -> String {
     let default_file_path: String = "build/a.out".to_string();
-
-    const OUTPUT_FILE_PATH: &str = "--output";
-    const OUTPUT_FILE_PATH_SHORT: &str = "-o";
 
     // find the position of the output flag if it exists
     // if it does, return the next argument as the output file path
@@ -59,13 +53,10 @@ pub fn output_file_path(cla: Vec<String>) -> String {
 }
 
 pub fn output_to_stdout(cla: Vec<String>) -> bool {
-    const OUTPUT_TO_STDOUT: &str = "--stdout";
-    const OUTPUT_TO_STDOUT_SHORT: &str = "-s";
     return cla.contains(&OUTPUT_TO_STDOUT.to_string())
         || cla.contains(&OUTPUT_TO_STDOUT_SHORT.to_string());
 }
 
 pub fn auto_run(cla: Vec<String>) -> bool {
-    const AUTO_RUN: &str = "--run";
     return cla.contains(&AUTO_RUN.to_string());
 }
