@@ -3,8 +3,8 @@
     "name": "2lang",
     "patterns": [
         { "include": "#strings" },
-        { "include": "#comments" },
         { "include": "#imports" },
+        { "include": "#comments" },
         { "include": "#code-execution" },
         { "include": "#code-execution-code" },
         { "include": "#macros" },
@@ -32,50 +32,15 @@
                     "name": "comment.block.<%-languageId%>",
                     "begin": "/\\*",
                     "end": "\\*/",
+                    "contentName": "comment.block.documentation.<%-languageId%>",
                     "patterns": [
                         {
                             "name": "storage.type.class.<%-languageId%>",
-                            "match": "@description"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@param"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@return"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@example"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@see"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@since"
+                            "match": "@(description|param|return|example|see|since|author|version|license|targets)"
                         },
                         {
                             "name": "invalid.deprecated.<%-languageId>",
                             "match": "@deprecated"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@author"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@version"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@license"
-                        },
-                        {
-                            "name": "storage.type.class.<%-languageId%>",
-                            "match": "@targets"
                         }
                     ]
                 }

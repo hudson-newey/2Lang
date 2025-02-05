@@ -9,9 +9,9 @@ you own language with a limited subset of reserved words.
 - `/*` Block comment start
 - `*/` Block comment end
 - `@` Pre-processor import
-    - `@!` Pre-processor directive (intepretor) start
-    - `@{` Pre-processor directive start
-        - `}` Pre-processor directive end
+  - `@!` Pre-processor directive (intepretor) start
+  - `@{` Pre-processor directive start
+    - `}` Pre-processor directive end
 - `#` Macro declaration
 - `$` Macro declaration parameter
 
@@ -24,6 +24,9 @@ you own language with a limited subset of reserved words.
     This is a block comment and will be ignored
     it can span multiple lines
 */
+
+// comments can also be in the middle of code
+[CONST] = (TYPES::STRING) /** a basic message */ {"Hello world"};
 ```
 
 ### Doc-gen Comments
