@@ -7,7 +7,7 @@ use crate::pre_processor;
 use crate::compiler;
 
 /* returns: an array of files that was processed as part of the build */
-pub fn build_source(args: &Vec<String>) -> Vec<String> {
+pub fn build_source(args: &Vec<String>, suppress_errors: &bool) -> Vec<String> {
     let file_name: &String = if args.len() > 2 {
         &args[2]
     } else {
@@ -39,6 +39,7 @@ pub fn build_source(args: &Vec<String>) -> Vec<String> {
             &should_preserve_linked,
             &with_processor_comments,
             print_debug,
+            suppress_errors,
         )
     } else {
         PreProcessorOutput {

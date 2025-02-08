@@ -9,10 +9,10 @@ use code_execution::code_execution::{
     has_code_execution_statements, remove_interpreter_code_blocks, run_code_execution,
 };
 use errors::files::file_error;
-use imports::imports::{has_imports, InterpolateImportReturn, interpolate_imports, remove_imports};
+use imports::imports::{has_imports, interpolate_imports, remove_imports, InterpolateImportReturn};
 use macros::user::{interpolate_macros, remove_macro_definitions};
-use minification::{comments::remove_comments, minification::minify_linked_file};
 use minification::whitespace::remove_whitespace;
+use minification::{comments::remove_comments, minification::minify_linked_file};
 use std::path::Path;
 use util::util::{read_file, write_to_file};
 
@@ -27,6 +27,7 @@ pub fn pre_process(
     preserve_linked: &bool,
     _processor_comments: &bool,
     debug: bool,
+    suppress_errors: &bool,
 ) -> PreProcessorOutput {
     // check if the input file exists
     if !Path::new(&file_path).exists() {
@@ -44,7 +45,12 @@ pub fn pre_process(
 
     let mut import_interpolated: Vec<String> = no_unit_comments.clone();
     while has_imports(import_interpolated.clone()) {
-        let import_output: InterpolateImportReturn = interpolate_imports(import_interpolated.clone(), file_path.clone());
+        let import_output: InterpolateImportReturn = interpolate_imports(
+            import_interpolated.clone(),
+            file_path.clone(),
+            suppress_errors,
+        );
+
         let intermediate_import_interpolate: Vec<String> = import_output.file_content;
 
         for source_file in import_output.imported_files {
@@ -61,7 +67,8 @@ pub fn pre_process(
 
     let mut code_execute_interpolated: Vec<String> = minified_linked_source.clone();
     while has_code_execution_statements(code_execute_interpolated.clone()) {
-        code_execute_interpolated = run_code_execution(code_execute_interpolated.clone(), debug)
+        code_execute_interpolated =
+            run_code_execution(code_execute_interpolated.clone(), debug, suppress_errors)
     }
 
     code_execute_interpolated = remove_interpreter_code_blocks(code_execute_interpolated);

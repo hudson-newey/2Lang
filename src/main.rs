@@ -45,7 +45,7 @@ fn watch_files(paths: Vec<String>, args: &Vec<String>) -> Result<()> {
 }
 
 fn request_build(watch: bool, args: &Vec<String>) -> Result<()> {
-    let sourced_files: Vec<String> = compiler::compiler::build_source(args);
+    let sourced_files: Vec<String> = compiler::compiler::build_source(args, &watch);
 
     if watch {
         watch_files(sourced_files.clone(), args)?;
@@ -56,7 +56,6 @@ fn request_build(watch: bool, args: &Vec<String>) -> Result<()> {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-
     if args.len() <= 1 {
         println!("Usage: {} <command> [options]", args[0]);
         exit(1);

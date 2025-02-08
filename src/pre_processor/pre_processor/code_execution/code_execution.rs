@@ -3,8 +3,12 @@ use std::borrow::Cow;
 use std::io::Write;
 use std::process::{exit, Child, Command, Output, Stdio};
 
-pub fn run_code_execution(contents: Vec<String>, debug: bool) -> Vec<String> {
-    return interpreter_code_execution(contents.clone(), debug);
+pub fn run_code_execution(
+    contents: Vec<String>,
+    debug: bool,
+    suppress_errors: &bool,
+) -> Vec<String> {
+    return interpreter_code_execution(contents.clone(), debug, suppress_errors);
 }
 
 pub fn has_code_execution_statements(contents: Vec<String>) -> bool {
@@ -38,7 +42,12 @@ pub fn remove_interpreter_code_blocks(contents: Vec<String>) -> Vec<String> {
     return result;
 }
 
-fn execute_code(interpreter: String, code: Vec<String>, debug: bool) -> Vec<String> {
+fn execute_code(
+    interpreter: String,
+    code: Vec<String>,
+    debug: bool,
+    suppress_errors: &bool,
+) -> Vec<String> {
     let stringified_code: String = code.join("\n");
 
     if debug {
@@ -76,7 +85,10 @@ fn execute_code(interpreter: String, code: Vec<String>, debug: bool) -> Vec<Stri
 
     if !errors.is_empty() {
         println!("Failed to run pre-processor interpreted macro:\n{}", errors);
-        exit(1);
+
+        if !*suppress_errors {
+            exit(1);
+        }
     }
 
     for line in code_output.split("\n") {
@@ -94,7 +106,11 @@ fn execute_code(interpreter: String, code: Vec<String>, debug: bool) -> Vec<Stri
     return output;
 }
 
-fn interpreter_code_execution(contents: Vec<String>, debug: bool) -> Vec<String> {
+fn interpreter_code_execution(
+    contents: Vec<String>,
+    debug: bool,
+    suppress_errors: &bool,
+) -> Vec<String> {
     let mut result = Vec::new();
 
     let mut code_interpreter = String::new();
@@ -127,7 +143,13 @@ fn interpreter_code_execution(contents: Vec<String>, debug: bool) -> Vec<String>
         if line.contains(tokens::PRE_PROCESSOR_DIRECTIVE_END) {
             in_code_execution_block = false;
 
-            let execution_output = execute_code(code_interpreter.to_string(), code_buffer, debug);
+            let execution_output = execute_code(
+                code_interpreter.to_string(),
+                code_buffer,
+                debug,
+                suppress_errors,
+            );
+
             for output_line in execution_output {
                 result.push(output_line);
             }

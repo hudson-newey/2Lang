@@ -6,7 +6,11 @@ pub struct InterpolateImportReturn {
     pub imported_files: Vec<String>,
 }
 
-pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> InterpolateImportReturn {
+pub fn interpolate_imports(
+    file_lines: Vec<String>,
+    file_path: String,
+    suppress_errors: &bool,
+) -> InterpolateImportReturn {
     let mut throw_errors: bool = false;
     let mut file_content: Vec<String> = Vec::new();
 
@@ -62,7 +66,7 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Interp
 
     // TODO: we should probably return a Result<T> type here so that once macro
     // errors are added, we can have multiple error types emitted
-    if throw_errors {
+    if throw_errors && !*suppress_errors {
         std::process::exit(1);
     }
 
