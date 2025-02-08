@@ -8,6 +8,8 @@
 ## Command Line Options
 
 - `--run` automatically runs the program after compilation
+- `--watch` watches the file for changes an automatically re-compiles the the source changes
+  - You might want to try this with the `--preserve-intermediate`, `--processor-comments`, `--preserve-linked`, and perhaps `--run`
 
 ## Compiler Options
 

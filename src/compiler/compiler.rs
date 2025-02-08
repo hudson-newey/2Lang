@@ -1,18 +1,22 @@
 use std::process::{exit, Command};
 use std::fs;
 
+use crate::pre_processor::pre_processor::PreProcessorOutput;
 use crate::program;
 use crate::pre_processor;
 use crate::compiler;
 
 /* returns: an array of files that was processed as part of the build */
-pub fn build_source(args: &Vec<String>) -> &String {
+pub fn build_source(args: &Vec<String>) -> Vec<String> {
     let file_name: &String = if args.len() > 2 {
         &args[2]
     } else {
         println!("Usage: {} build <file_name> [options]", args[0]);
         exit(1)
     };
+
+    let mut source_files: Vec<String> = Vec::new();
+    source_files.push(file_name.clone());
 
     let print_debug: bool = program::arguments::log_debug(args.clone());
     if print_debug {
@@ -25,7 +29,7 @@ pub fn build_source(args: &Vec<String>) -> &String {
     // test if there is a directory for the output file, if it doesn't exist
     // we want to create a directory for it
 
-    let preprocessed_file_path: String = if program::arguments::generate_intermediate(args.clone()) {
+    let pre_processor_output: PreProcessorOutput = if program::arguments::generate_intermediate(args.clone()) {
         let should_preserve_linked: bool = program::arguments::preserve_linked(args.clone());
         let with_processor_comments: bool = program::arguments::processor_comments(args.clone());
 
@@ -37,8 +41,16 @@ pub fn build_source(args: &Vec<String>) -> &String {
             print_debug,
         )
     } else {
-        file_name.to_string()
+        PreProcessorOutput {
+            output_path: file_name.to_string(),
+            source_files: vec![],
+        }
     };
+
+    let preprocessed_file_path: String = pre_processor_output.output_path;
+    for source_file in pre_processor_output.source_files {
+        source_files.push(source_file.clone());
+    }
 
     if print_debug {
         println!("Linked file in: {}\n", preprocessed_file_path);
@@ -68,6 +80,6 @@ pub fn build_source(args: &Vec<String>) -> &String {
             .expect("failed to execute process");
     }
 
-    return &file_name;
+    return source_files.clone();
 }
 

@@ -1,11 +1,18 @@
 use crate::pre_processor::pre_processor::{errors, util};
 use crate::tokens::tokens;
 
-pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<String> {
+pub struct InterpolateImportReturn {
+    pub file_content: Vec<String>,
+    pub imported_files: Vec<String>,
+}
+
+pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> InterpolateImportReturn {
     let mut throw_errors: bool = false;
-    let mut new_file_lines: Vec<String> = Vec::new();
+    let mut file_content: Vec<String> = Vec::new();
 
     let mut line_number: usize = 0;
+
+    let mut imported_files: Vec<String> = Vec::new();
 
     let mut evaluated_imports: Vec<String> = Vec::new();
     for line in file_lines {
@@ -26,6 +33,8 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
             // replace the line with the contents of the file
             let imported_file_path: String = line[1..].to_string();
 
+            imported_files.push(imported_file_path.clone());
+
             // check if the file exists
             if !std::path::Path::new(&imported_file_path).exists() {
                 errors::files::import_error(
@@ -39,15 +48,15 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
                 let imported_file_lines: Vec<String> = util::util::read_file(imported_file_path);
 
                 for imported_line in imported_file_lines {
-                    new_file_lines.push(imported_line);
+                    file_content.push(imported_line);
                 }
 
-                new_file_lines.push("\n".to_string());
+                file_content.push("\n".to_string());
 
                 evaluated_imports.push(line);
             }
         } else {
-            new_file_lines.push(line);
+            file_content.push(line);
         }
     }
 
@@ -57,7 +66,10 @@ pub fn interpolate_imports(file_lines: Vec<String>, file_path: String) -> Vec<St
         std::process::exit(1);
     }
 
-    return new_file_lines;
+    return InterpolateImportReturn {
+        file_content,
+        imported_files,
+    };
 }
 
 pub fn has_imports(file_contents: Vec<String>) -> bool {

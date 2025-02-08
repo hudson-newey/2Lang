@@ -1,5 +1,6 @@
 use std::env;
 use std::process::exit;
+use std::sync::mpsc::channel;
 
 use notify::*;
 use std::{path::Path, time::Duration};
@@ -13,41 +14,44 @@ mod pre_processor;
 mod program;
 mod tokens;
 
-fn request_build(args: &Vec<String>) {
-    let sourced_file: &String = compiler::compiler::build_source(&args);
+fn watch_files(paths: Vec<String>, args: &Vec<String>) -> Result<()> {
+    // Create a channel to receive the events
+    let (tx, rx) = channel();
 
-    let should_watch: bool = watch_source(args.clone());
-    if should_watch {
-        watch_file(&sourced_file, &args);
+    // Create a watcher with default config
+    let mut watcher = RecommendedWatcher::new(
+        tx,
+        Config::default().with_poll_interval(Duration::from_secs(2)),
+    )?;
+
+    // Watch each path
+    for path in paths {
+        watcher.watch(Path::new(&path), RecursiveMode::NonRecursive)?;
     }
+
+    // Handle incoming events
+    for res in rx {
+        match res {
+            Ok(event) => {
+                if let Some(_) = event.paths.first() {
+                    let _ = request_build(true, &args.clone());
+                }
+            }
+            Err(e) => println!("Error: {}", e),
+        }
+    }
+
+    Ok(())
 }
 
-fn watch_file(sourced_file: &String, args: &Vec<String>) {
-    // we should never trigger this condition, but I don't know rust well enough
-    // to know if this type of error would be caught by the compiler
-    if sourced_file.len() < 1 {
-        println!("Unable to watch: Source file count < 1");
-        return;
+fn request_build(watch: bool, args: &Vec<String>) -> Result<()> {
+    let sourced_files: Vec<String> = compiler::compiler::build_source(args);
+
+    if watch {
+        watch_files(sourced_files.clone(), args)?;
     }
 
-    let main_file: String = sourced_file.clone();
-
-    // TODO: I probably want to use a debounced watcher
-    let (tx, rx) = std::sync::mpsc::channel();
-    let mut watcher: Box<dyn Watcher> = if RecommendedWatcher::kind() == WatcherKind::PollWatcher {
-        let config = Config::default().with_poll_interval(Duration::from_secs(1));
-        Box::new(PollWatcher::new(tx, config).unwrap())
-    } else {
-        Box::new(RecommendedWatcher::new(tx, Config::default()).unwrap())
-    };
-
-    watcher
-        .watch(Path::new(main_file.as_str()), RecursiveMode::Recursive)
-        .unwrap();
-
-    for _ in rx {
-        request_build(&args);
-    }
+    Ok(())
 }
 
 fn main() {
@@ -61,7 +65,8 @@ fn main() {
     let command: &String = &args[1];
 
     if command == "build" || command == "b" {
-        request_build(&args);
+        let should_watch: bool = watch_source(args.clone());
+        let _ = request_build(should_watch, &args);
     } else if command == "mod" || command == "m" {
         if args.len() < 3 {
             println!("Usage: {} mod <module> [options]", args[0]);
